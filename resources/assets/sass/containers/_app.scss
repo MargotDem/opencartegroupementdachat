@@ -1,0 +1,164 @@
+h3, h5, h6 {
+    font-family: $titleFont !important;
+  }
+  
+  h4 {
+    font-size: 17px !important;
+  }
+  
+  .highlight {
+    color: $highlight;
+    font-weight: 600;
+  }
+  
+  p {
+    line-height: 30px;
+  }
+  
+  a {
+    color: $greenLink !important;
+    text-decoration: none;
+  }
+  
+  a:hover {
+    color: $greenLinkHovered !important;
+    text-decoration: none !important;
+    cursor: pointer;
+  }
+  
+  /*
+  borders
+  */
+  
+  .border {
+      position: fixed;
+      z-index: 100;
+      background: #fff;
+      transition: 1.5s cubic-bezier(.785,.135,.15,.86);
+  }
+  
+  .borders div {
+    border: none !important;
+  }
+  
+  .border.top {
+      top: 0;
+      transform: translate3d(0,-40px,0);
+  }
+  
+  .border.hor {
+      left: 0;
+      width: 100%;
+      height: 55px;
+  }
+  
+  .border.bot {
+      bottom: 0;
+      transform: translate3d(0,40px,0);
+  }
+  
+  .border.left {
+      left: 0;
+      transform: translate3d(-40px,0,0);
+  }
+  
+  .border.vert {
+      top: 0;
+      width: 55px;
+      height: 100%;
+  }
+  
+  .border.right {
+      right: 0;
+      transform: translate3d(40px,0,0);
+  }
+  
+  /*
+  smooth page appearing
+  */
+  
+  .page-component {
+    background-color: $backgroundColor;
+    position: fixed;
+    height: 100vh;
+    width: 100vw;
+    z-index: 89;
+    transition: 1.5s;
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .page-component-show {
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  /*
+  buttons
+  */
+  
+  .my-button {
+    width: 150px !important;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: $greenButton !important;
+    font-size: 20px;
+    border: 1px solid $greenButton !important;
+    border-radius: 4px;
+  }
+  
+  .my-small-button {
+    font-size: 16px;
+    height: 30px;
+    width: auto !important;
+    padding: 0px 8px;
+  }
+  
+  .delete-button {
+    width: 30px!important;
+    color: $red!important;
+    font-weight: bold;
+  }
+  
+  .my-button:hover {
+    cursor: pointer;
+    color: $greenButtonHovered !important;
+    border: 1px solid $greenButtonBorderHovered !important;
+  }
+  
+  /*
+  forms
+  */
+  
+  input, select {
+    margin-bottom: 30px !important;
+    width: 230px;
+    height: 30px;
+    background-color: $backgroundColor;
+    color: $greenButton;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+    border-radius: 2px;
+    display: block;
+  }
+  
+  label  {
+    color: $greenButton;
+    width: 230px;
+  }
+  
+  textarea {
+    margin-bottom: 30px !important;
+    width: 230px;
+    height: 100px;
+    background-color: $backgroundColor;
+    color: $greenButton;
+    border: none;
+    outline: none;
+    padding-left: 10px;
+    border-radius: 2px;
+  }
+  

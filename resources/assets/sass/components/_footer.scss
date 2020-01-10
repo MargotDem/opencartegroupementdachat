@@ -1,0 +1,28 @@
+.footer-box {
+    height: 150px;
+    padding-bottom: 30px;
+    display: flex;
+    align-items: flex-end;
+    background-color: $backgroundColor;
+  }
+  
+  .footer-logo {
+    height: 60px;
+  }
+  
+  .footer-box a {
+    margin-top: 5px;
+    color: $greyText !important;
+    text-decoration: none !important;
+  }
+  
+  .footer-box a:hover {
+    color: $lightGrayBorder !important;
+  }
+  
+  .footer-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  

@@ -1,0 +1,400 @@
+/*
+TopContent
+*/
+
+.top-content-box {
+    position: relative;
+    height: 750px;
+  }
+  
+  .top-content-title {
+    margin-top: 250px;
+    font-size: 35px;
+    font-family: $titleFont;
+  }
+  
+  .top-content-text-box {
+    margin-top: 50px;
+    height: 260px;
+    border-right: 1px solid $lightGrayBorder;
+    transition: 1s;
+  }
+  
+  .top-content-text-box-expand {
+    height: 340px;
+  }
+  
+  .top-content-text {
+    padding-left: 40px;
+    font-size: 20px;
+    font-family: $textFont;
+    color: $greyText;
+  }
+  
+  .top-content-img-section {
+    width: 405px;
+    background: red;
+    position: absolute;
+    right: 0px;
+    bottom: 70px;
+    box-shadow: 0 15px 35px rgba(0,0,0,.1);
+  }
+  
+  .top-content-img-section img {
+    width: 100%;
+  }
+  
+  .sextant-box {
+    width: 390px;
+    position: fixed;
+    top: 275px;
+    right: 150px;
+    z-index: -1;
+  }
+  
+  .sextant {
+    width: 100%;
+    transform: rotate(30deg);
+  }
+  
+  /*
+  SearchFormSection
+  */
+  
+  .search-form-box {
+    height: 350px;
+    background-color: $blueBackground;
+    z-index: 300;
+    -webkit-transition: 0.5s; /* Safari */
+    transition: 0.5s;
+  }
+  
+  .search-form-box-expand {
+    height: 880px;
+  }
+  
+  .search-form-title {
+    margin: 70px 0px;
+    font-size: 26px;
+    font-family: $titleFont;
+    text-align: center;
+    width: 100%;
+  }
+  
+  .search-form {
+    display: flex;
+    overflow-y: hidden;
+    width: 100%;
+  }
+  
+  .search-form-small-device {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .search-form-agencies {
+    font-size: 20px;
+    font-family: $textFont;
+    width: 50%;
+    height: 50px;
+    -webkit-transition: 2s; /* Safari */
+    transition: 2s;
+    border-right: 1px solid $lightGrayBorder;
+  }
+  
+  .search-form-agencies-expand {
+    width: 1200px;
+    height: 620px;
+  }
+  
+  .search-form-agencies-expanded {
+    height: 620px;
+    -webkit-transition: 0.5s; /* Safari */
+    transition: 0.5s;
+  }
+  
+  .search-form-agencies-reduced {
+    width: 400px;
+  }
+  
+  .search-form-schools {
+    font-size: 20px;
+    font-family: $textFont;
+    width: 50%;
+    height: 50px;
+    -webkit-transition: 2s; /* Safari */
+    transition: 2s;
+  }
+  
+  .search-form-schools-expand {
+    width: 1000px;
+    height: 620px;
+  }
+  
+  .search-form-agencies-text {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .search-form-schools-text {
+    display: flex;
+    justify-content: center;
+  }
+  
+  .search-form-content {
+    -webkit-transition: 1.5s;
+    -moz-transition: 1.5s;
+    -o-transition: 1.5s;
+    transition: 1.5s;
+    opacity: 0;
+    visibility: hidden;
+    height: 100px;
+    overflow: hidden;
+  }
+  
+  .search-form-content-show {
+    opacity: 1;
+    visibility: visible;
+    height: 600px;
+  }
+  
+  .search-form-content-title {
+    font-size: 17px;
+    margin-top: 30px;
+    color: $greyText;
+  }
+  
+  .search-form-content-title-left {
+    margin-left: 210px;
+  }
+  
+  .search-form-content-title-right {
+    margin-left: 90px;
+  }
+  
+  .search-form-content-inputs-left {
+    margin-top: 30px;
+    margin-left: 260px;
+  }
+  
+  .search-form-content-inputs-right {
+    margin-top: 30px;
+    margin-left: 170px;
+  }
+  
+  /*
+  About
+  */
+  
+  .about-box {
+    height: 1650px;
+    background-color: $backgroundColor;
+    z-index: 10;
+    position: relative;
+  }
+  
+  .about-container {
+    padding-top: 150px;
+  }
+  
+  .about-column {
+    display: flex;
+    flex-direction: column;
+    // align-items: center;
+    height: 1400px;
+  }
+  
+  .about-left-column {
+    border-right: 1px solid $lightGrayBorder;
+    justify-content: space-between;
+    padding-bottom: 50px;
+  }
+  
+  .about-right-column {
+    justify-content: center;
+  }
+  
+  .about-paragraph {
+    width: 480px;
+    -webkit-transition: 2s;
+    -moz-transition: 2s;
+    -o-transition: 2s;
+    transition: 2s;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .about-paragraph-show {
+    opacity: 1;
+    visibility: visible;
+  }
+  
+  .about-paragraph-title {
+    margin: 0px 0px 50px 0px;
+  }
+  
+  .about-paragraph-text {
+    margin-left: 30px;
+    font-size: 20px;
+    font-family: $textFont;
+    color: $greyText;
+  }
+  
+  .first-paragraph {
+    margin-left: 30px;
+  }
+  
+  .second-paragraph {
+    margin-top: 40px;
+  }
+  
+  .img1 {
+    position: absolute;
+    top: 0px;
+    right: 140px;
+    transform: rotate(1deg);
+  }
+  
+  .img2 {
+    position: absolute;
+    top: 390px;
+    left: 120px;
+    transform: rotate(-3deg);
+  }
+  
+  .img3 {
+    position: absolute;
+    top: 750px;
+    right: 140px;
+    transform: rotate(2deg);
+  }
+  
+  #img1 {
+    height: 260px;
+    border-radius: 2px;
+  }
+  
+  #img2 {
+    height: 200px;
+    border-radius: 2px;
+  }
+  
+  #img3 {
+    height: 240px;
+    border-radius: 2px;
+  }
+  
+  /*
+  Responsiveness
+  */
+  
+  @media (min-width: 769px) {
+    /*
+    SearchFormSection
+    */
+  
+    .search-form-small-device {
+      display: none;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    /*
+    TopContent
+    */
+  
+    .top-content-box {
+      height: 90vh;
+    }
+  
+    .top-content-title {
+      margin-top: 200px;
+      margin-left: 50px;
+      font-size: 30px;
+      width: 60vw;
+    }
+  
+    .top-content-text {
+      padding-left: 50px;
+    }
+  
+    .sextant-box {
+      width: 160px;
+      top: 100px;
+      right: 0px;
+    }
+  
+    /*
+    SearchFormSection
+    */
+  
+    .search-form-box {
+      height: 900px;
+    }
+  
+    .search-form-title {
+      padding: 0px 30px;
+      font-size: 20px;
+      margin-bottom: 30px;
+    }
+  
+    .search-form-content-title {
+      margin: 50px 0px 30px 0px;
+    }
+  
+    .search-form-agencies {
+      display: none;
+    }
+  
+    .search-form-schools {
+      display: none;
+    }
+  
+    /*
+    About
+    */
+  
+    .about-box {
+      // height: 1700px;
+      height: auto;
+    }
+  
+    #img2 {
+      display: none;
+    }
+  
+    #img1 {
+      display: none;
+    }
+  
+    .about-container {
+      padding-top: 100px;
+    }
+  
+    .about-column {
+      height: auto;
+    }
+  
+    .about-left-column {
+      padding-bottom: 0px;
+    }
+  
+    .about-left-column {
+      border-right: none;
+    }
+  
+    .about-paragraph {
+      margin: 0px 20px 100px 20px;
+      width: auto;
+    }
+  
+    .about-paragraph-text {
+      margin-left: 0px;
+    }
+  
+    .first-paragraph {
+      margin-left: 0px;
+    }
+  }
+  
