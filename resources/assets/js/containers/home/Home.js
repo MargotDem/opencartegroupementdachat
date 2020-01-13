@@ -20,10 +20,11 @@ export default class Home extends Component {
   }
 
   render () {
+    let { motsCles } = this.props
     return (
       <PageComponent>
         <TopContent scrolledPast={this.state.scrolledPast} />
-        <SearchFormSection />
+        <SearchFormSection motsCles={motsCles} />
         <Waypoint
           onEnter={() => { this._handleWaypoint(true) }}
           onLeave={() => { this._handleWaypoint(false) }}

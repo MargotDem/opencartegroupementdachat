@@ -30,6 +30,7 @@ class EtablissementMutualisateurController {
    * @param {View} ctx.view
    */
   async index({ request, response, view }) {
+    return "request: " + request
   }
 
   /**
@@ -156,6 +157,12 @@ class EtablissementMutualisateurController {
         return "Error: " + error
       }
 
+    } else if (zone_de_couverture_code_postal) {
+      try {
+        await Database.raw('INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)', [code_uai, departement])
+      } catch (error) {
+        return "Error: " + error
+      }
     } else if (zone_de_couverture_departements.length > 0) {
       try {
         for (let i = 0; i < zone_de_couverture_departements.length; i++) {

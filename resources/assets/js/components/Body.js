@@ -5,6 +5,7 @@ import axios from 'axios'
 
 import Home from '../containers/home/Home'
 import AddSchool from '../containers/addSchool/AddSchool'
+import Schools from '../containers/schools/Schools'
 
 class Body extends Component {
   constructor (props) {
@@ -86,6 +87,7 @@ componentDidMount () {
     const ROUTES = [
       this.buildRoute('/', true, Home, null),
       this.buildRoute('/ajouter-etablissement', false, AddSchool, null),
+      this.buildRoute('/etablissements', true, Schools, null),
     ]
 
     return (

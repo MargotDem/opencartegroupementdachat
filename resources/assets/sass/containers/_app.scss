@@ -145,6 +145,13 @@ h3, h5, h6 {
     display: block;
   }
 
+  .radio-input {
+    display: flex;
+    input {
+      width: 50px;
+    }
+  }
+
   .multipleselect {
     height: 180px;
   }

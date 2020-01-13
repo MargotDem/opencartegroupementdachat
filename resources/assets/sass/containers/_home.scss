@@ -62,29 +62,29 @@ TopContent
   */
   
   .search-form-box {
-    height: 350px;
+    height: 1100px;
     background-color: $blueBackground;
     z-index: 300;
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
   }
   
-  .search-form-box-expand {
-    height: 880px;
-  }
-  
   .search-form-title {
     margin: 70px 0px;
-    font-size: 26px;
-    font-family: $titleFont;
+    font-size: 20px;
+    font-family: $textFont;
     text-align: center;
     width: 100%;
   }
   
   .search-form {
     display: flex;
+    justify-content: center;
+    align-items: center;
     overflow-y: hidden;
     width: 100%;
+    font-size: 20px;
+    font-family: $textFont;
   }
   
   .search-form-small-device {

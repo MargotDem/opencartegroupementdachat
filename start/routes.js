@@ -20,6 +20,7 @@ const Route = use('Route')
 Route.group(() => {
     Route.get('mots-cles', 'MotsCleController.index')
     Route.post('etablissements', 'EtablissementMutualisateurController.store')
+    Route.get('etablissements', 'EtablissementMutualisateurController.index')
   })
   .prefix('api/')
 

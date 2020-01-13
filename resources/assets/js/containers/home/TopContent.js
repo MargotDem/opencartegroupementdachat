@@ -4,10 +4,6 @@ export default class TopContent extends Component {
   componentDidMount() {
     this.timer = setInterval(function () {
       let sextant = document.getElementById('sextant')
-      // if (window.pageYOffset > 1500) {
-      //   console.log("stop")
-      //   sextant.style.display = "none";
-      // } else
       let degrees = ((window.pageYOffset) / 10) + 30
       sextant.style.transform = 'rotate(' + degrees + 'deg)'
     }, 10)
