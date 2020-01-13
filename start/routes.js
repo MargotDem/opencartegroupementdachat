@@ -16,4 +16,11 @@
 /** @type {typeof import('@adonisjs/framework/src/Route/Manager')} */
 const Route = use('Route')
 
+
+Route.group(() => {
+    Route.get('mots-cles', 'MotsCleController.index')
+    Route.post('etablissements', 'EtablissementMutualisateurController.store')
+  })
+  .prefix('api/')
+
 Route.on('/').render('welcome')

@@ -1,0 +1,41 @@
+.form-section-box_add-school {
+    -webkit-transition: 1s;
+    transition: 1s;
+    height: 1900px;
+  }
+  
+  .form-section-box_add-school_reduced {
+    height: 300px;
+  }
+  
+  .add-school-form {
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    opacity: 1;
+    visibility: visible;
+    overflow: hidden;
+  }
+  
+  .add-school-form-hide {
+    height: 0px;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .add-school-form-sent {
+    position: absolute;
+    top: 60px;
+    font-size: 20px;
+    font-family: $titleFont;
+    color: $greyText;
+    -webkit-transition: 0.5s;
+    transition: 0.5s;
+    opacity: 0;
+    visibility: hidden;
+  }
+  
+  .add-school-form-sent-show {
+    opacity: 1;
+    visibility: visible;
+  }
+  

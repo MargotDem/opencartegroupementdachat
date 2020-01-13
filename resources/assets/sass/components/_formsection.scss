@@ -1,0 +1,27 @@
+.form-section-box {
+    background-color: $blueBackground;
+    padding: 70px 0px;
+    font-size: 20px;
+  }
+  
+  .form-section {
+    display: flex;
+    justify-content: center;
+    position: relative;
+  }
+  
+  .required-fields {
+    position: absolute;
+    bottom: -30px;
+    right: 0px;
+    font-size: 16px;
+    color: $greyText;
+  }
+  
+  .validation-message {
+    position: relative;
+    margin-bottom: 30px;
+    font-family: $textFont;
+    color: $red;
+  }
+  

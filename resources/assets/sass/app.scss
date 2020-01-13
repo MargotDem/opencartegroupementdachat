@@ -6,8 +6,8 @@
 // Components
 @import "components/header";
 @import "components/footer";
-// @import "components/topsection";
-// @import "components/formsection";
+@import "components/topsection";
+@import "components/formsection";
 // @import "components/resultssection";
 // @import "components/table";
 // @import "components/infomodal";
@@ -18,7 +18,7 @@
 @import "containers/app";
 @import "containers/home";
 // @import "containers/statistics";
-// @import "containers/addschool";
+@import "containers/addschool";
 // @import "containers/changeagency";
 // @import "containers/changeinfo";
 // @import "containers/changememo";

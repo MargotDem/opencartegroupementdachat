@@ -46,6 +46,7 @@
     "react-router-dom": "^5.1.2",
     "react-waypoint": "^9.0.2",
     "sass-loader": "^8.0.0",
+    "simple-react-validator": "^1.4.1",
     "webpack": "^4.41.5"
   },
   "devDependencies": {

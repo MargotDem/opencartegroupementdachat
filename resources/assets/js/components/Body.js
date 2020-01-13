@@ -1,8 +1,10 @@
 import React, { Component } from 'react'
 // import { withCookies } from 'react-cookie'
 import { Switch, Route, Redirect } from 'react-router-dom'
+import axios from 'axios'
 
 import Home from '../containers/home/Home'
+import AddSchool from '../containers/addSchool/AddSchool'
 
 class Body extends Component {
   constructor (props) {
@@ -23,6 +25,16 @@ class Body extends Component {
 //   logUnlogAdmin (isAdminLogged) {
 //     this.setState({ isAdminLogged })
 //   }
+
+componentDidMount () {
+  let requestUrl = (window.env === 'production' ? '' : '/api/mots-cles')
+  axios.get(requestUrl)
+    .then(response => {
+      this.setState({ motsCles: response.data})
+    }).catch(error => {
+      console.log(error)
+    })
+}
 
   buildRoute (path, isExact, Component, title) {
     let routeObject = {
@@ -49,6 +61,7 @@ class Body extends Component {
             dynamicTitle={dynamicTitle}
             isAdminLogged={isAdminLogged}
             logUnlogAdmin={this.logUnlogAdmin}
+            motsCles={this.state.motsCles}
           />
         }
       />
@@ -72,6 +85,7 @@ class Body extends Component {
   render () {
     const ROUTES = [
       this.buildRoute('/', true, Home, null),
+      this.buildRoute('/ajouter-etablissement', false, AddSchool, null),
     ]
 
     return (

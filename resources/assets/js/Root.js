@@ -10,7 +10,6 @@ import { Scroller } from './components/scroller'
 class Root extends Component {
   render () {
     return (
-        // <p>henlo friend</p>
     //   <CookiesProvider>
         <HashRouter>
           <div>
