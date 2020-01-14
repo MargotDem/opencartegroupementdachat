@@ -293,9 +293,9 @@ class EtablissementMutualisateurController {
       try {
         console.log("hey", timestamp)
         return await Database
-        .table('ocga_mutualisateurs')
-        .where('code_uai', params.code_uai)
-        .update('up_to_date', timestamp)
+          .table('ocga_mutualisateurs')
+          .where('code_uai', params.code_uai)
+          .update('up_to_date', timestamp)
       } catch (error) {
         return "Error: " + error
       }
@@ -313,6 +313,31 @@ class EtablissementMutualisateurController {
    */
   async destroy({ params, request, response }) {
   }
+
+
+
+
+
+  async getDepartements({ params }) {
+    try {
+      return await Database
+        .raw(`select departement from ocga_mutualisateurs_departements where code_uai = ?`, [params.code_uai])
+    } catch (error) {
+      return "Error: " + error
+    }
+  }
+
+  async getMotsCles({ params }) {
+    try {
+      return await Database
+        .raw(`select * from ocga_mutualisateurs_mots_cles
+        inner join ocga_mots_cles on ocga_mots_cles.id = ocga_mutualisateurs_mots_cles.id_mot_cle
+        where ocga_mutualisateurs_mots_cles.code_uai = ?`, [params.code_uai])
+    } catch (error) {
+      return "Error: " + error
+    }
+  }
 }
 
+// select * from 
 module.exports = EtablissementMutualisateurController

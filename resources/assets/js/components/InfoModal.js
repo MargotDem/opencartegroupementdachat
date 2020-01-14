@@ -3,6 +3,7 @@ import Modal from 'react-modal'
 import { NavLink } from 'react-router-dom'
 import axios from 'axios'
 import { NOMBRE_ADHERENTS, renderTypeMarche, renderTypeAdherent } from "../config"
+import MotsCles from './MotsCles'
 
 const customStyles = {
     content: {
@@ -49,7 +50,7 @@ export default class App extends Component {
     }
 
     render() {
-        let { modalText, school } = this.props
+        let { modalText, school, zoneDeCouverture } = this.props
         let d = new Date(school.up_to_date)
         let month = (d.getUTCMonth() + 1) < 10 ? "0" + (d.getUTCMonth() + 1) : (d.getUTCMonth() + 1)
         let date = d.getUTCDate() + "-" + month + "-" + d.getUTCFullYear()
@@ -91,8 +92,11 @@ export default class App extends Component {
                         <div className="school-modal-bottom-sections">
                             <div className="school-modal-bottom-section">
                                 <h4>Zone de couverture</h4>
-                                <p>hey</p>
-
+                                <p>
+                                    <ul>{zoneDeCouverture.map((departement, i) => <li>{departement}</li>)}
+                                    </ul></p>
+                                    
+                               
                                 <h4>Nombre d’adhérents</h4>
                                 <p>{NOMBRE_ADHERENTS[school.nombre_adherents - 1]}</p>
 
@@ -108,7 +112,7 @@ export default class App extends Component {
                                 <p>{renderTypeMarche(school.fournitures, school.services)}</p>
 
                                 <h4>Thématiques d’achat</h4>
-                                <p>hey</p>
+                                <p><MotsCles code_uai={school.code_uai} /></p>
                             </div>
 
                             <div className="school-modal-bottom-section">
@@ -151,6 +155,17 @@ export default class App extends Component {
                                     Modifier
                             </NavLink>
                             </div>
+
+
+                            {/* {
+                          isAdminLogged && <td>
+                            <DeleteSchool
+                              codeUai={school.code_uai}
+                              fetchSchools={fetchSchools}
+                            />
+                          </td>
+                    } */}
+
                             <div className='school-modal-button my-button my-small-button'>
 
                                 Supprimer

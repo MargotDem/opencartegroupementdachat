@@ -5,7 +5,7 @@ export default class ResultsSection extends Component {
     let { children } = this.props
     return (
       <div className='results-section-box'>
-        <div className='container'>
+        <div className='my-container'>
           <div className='row results-section'>
             {children}
           </div>

@@ -89,9 +89,8 @@
   
   .school-modal-bottom {
     width: 100%;
-    flex-grow: 4;
     background: $blueBackground;
-    padding: 25px 10px 0px 10px;
+    padding: 25px 10px 25px 10px;
   }
   
   .school-modal-bottom-sections {
@@ -103,7 +102,7 @@
   .school-modal-button {
     width: 120px;
   }
-  
+
   .school-modal-bottom-section>p {
     margin-bottom: 20px;
     margin-left: 20px;
