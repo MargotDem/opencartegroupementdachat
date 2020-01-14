@@ -30,7 +30,81 @@ class EtablissementMutualisateurController {
    * @param {View} ctx.view
    */
   async index({ request, response, view }) {
-    return "request: " + request
+
+    try {
+      const query = request.get()
+      console.log("HEY", Object.keys(query))
+      console.log("HO", Object.values(query))
+
+      let sqlConditions = ''
+      let motCles = []
+
+      for (let i = 0; i < Object.keys(query).length; i++) {
+        let field = Object.keys(query)[i]
+        let criterion = Object.values(query)[i]
+
+        if (criterion === "") {
+          motCles.push(field)
+        } else {
+          switch (field) {
+            case "type_marche":
+              sqlConditions = sqlConditions + `ocga_mutualisateurs.${criterion} = 1 AND `
+              break
+            case "region":
+              sqlConditions = sqlConditions + `etablissements.region = '${criterion}' AND `
+              break
+            case "academie":
+              sqlConditions = sqlConditions + `etablissements.academie = '${criterion}' AND `
+              break
+            case "departement":
+              sqlConditions = sqlConditions + `ocga_mutualisateurs_departements.departement = '${criterion}' AND `
+              break
+            case "nom":
+              sqlConditions = sqlConditions + `etablissements.nom LIKE '%${criterion}%' AND `
+              break
+            case "code_uai":
+              sqlConditions = sqlConditions + `ocga_mutualisateurs.code_uai = '${criterion}' AND `
+              break
+          }
+        }
+
+      }
+
+      if (sqlConditions !== '' && motCles.length === 0) {
+        sqlConditions = sqlConditions.slice(0, -4)
+      }
+
+      if (motCles.length > 0) {
+        let sqlMotsClesConditions = ""
+        for (let j = 0; j < motCles.length; j++) {
+          sqlMotsClesConditions = sqlMotsClesConditions + `ocga_mots_cles.mot_cle = '${motCles[j]}' OR `
+        }
+       sqlMotsClesConditions = sqlMotsClesConditions.slice(0, -3)
+       sqlConditions = sqlConditions + " (" + sqlMotsClesConditions + ")"
+      }
+
+      let sqlQuery = `
+      select COUNT(ocga_mutualisateurs.code_uai), ocga_mutualisateurs.code_uai, email, nombre_adherents, eple, autres_admins_publiques, ville_couverte, services, fournitures, ocga_mutualisateurs.infos_complementaires, ocga_mutualisateurs.up_to_date, status, nom, adresse, code_postal, commune, etablissements.departement, region, academie, ocga_mutualisateurs.telephone
+      from ocga_mutualisateurs
+      inner join etablissements ON etablissements.code_uai = ocga_mutualisateurs.code_uai
+
+      inner join ocga_mutualisateurs_departements ON ocga_mutualisateurs.code_uai = ocga_mutualisateurs_departements.code_uai
+
+      inner join ocga_mutualisateurs_mots_cles on ocga_mutualisateurs_mots_cles.code_uai = ocga_mutualisateurs.code_uai
+      inner join ocga_mots_cles on ocga_mots_cles.id = ocga_mutualisateurs_mots_cles.id_mot_cle
+
+      WHERE ${sqlConditions}
+      group by code_uai
+      `
+
+      console.log("SQL QERUY : ", sqlQuery)
+
+      let data = Database
+        .raw(sqlQuery)
+      return await data
+    } catch (error) {
+      return "Error: " + error
+    }
   }
 
   /**
@@ -78,9 +152,9 @@ class EtablissementMutualisateurController {
 
     try {
       let etablissement = await Database
-      .table('etablissements')
-      .where('code_uai', code_uai)
-      .first()
+        .table('etablissements')
+        .where('code_uai', code_uai)
+        .first()
 
       if (etablissement) {
         await Database
