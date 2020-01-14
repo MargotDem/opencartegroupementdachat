@@ -79,8 +79,8 @@ class EtablissementMutualisateurController {
         for (let j = 0; j < motCles.length; j++) {
           sqlMotsClesConditions = sqlMotsClesConditions + `ocga_mots_cles.mot_cle = '${motCles[j]}' OR `
         }
-       sqlMotsClesConditions = sqlMotsClesConditions.slice(0, -3)
-       sqlConditions = sqlConditions + " (" + sqlMotsClesConditions + ")"
+        sqlMotsClesConditions = sqlMotsClesConditions.slice(0, -3)
+        sqlConditions = sqlConditions + " (" + sqlMotsClesConditions + ")"
       }
 
       let sqlQuery = `
@@ -97,7 +97,7 @@ class EtablissementMutualisateurController {
       group by code_uai
       `
 
-      console.log("SQL QERUY : ", sqlQuery)
+      console.log("SQL QUERY : ", sqlQuery)
 
       let data = Database
         .raw(sqlQuery)
@@ -283,6 +283,24 @@ class EtablissementMutualisateurController {
    * @param {Response} ctx.response
    */
   async update({ params, request, response }) {
+    const query = request.all()
+    if ("update" in query) {
+
+      let date = new Date();
+      let month = (date.getUTCMonth() + 1) < 10 ? "0" + (date.getUTCMonth() + 1) : (date.getUTCMonth() + 1)
+      let timestamp = date.getUTCFullYear() + "-" + month + "-" + date.getUTCDate()
+
+      try {
+        console.log("hey", timestamp)
+        return await Database
+        .table('ocga_mutualisateurs')
+        .where('code_uai', params.code_uai)
+        .update('up_to_date', timestamp)
+      } catch (error) {
+        return "Error: " + error
+      }
+
+    }
   }
 
   /**

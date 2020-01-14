@@ -158,3 +158,24 @@ export const REGIONS = [
     "89 - Yonne",
     "78 - Yvelines",
   ]
+
+  export const NOMBRE_ADHERENTS = [
+    "1 - 10",
+    "11 - 50",
+    "51 - 100",
+    "+ de 100"
+  ]
+
+  export function renderTypeAdherent(eple, autres_admins_publiques) {
+    if (eple && autres_admins_publiques) {
+        return "EPLE et autres administrations publiques"
+    } else if (eple) return "EPLE"
+    else if (autres_admins_publiques) return "Autre administrations publiques"
+}
+
+export function renderTypeMarche(fournitures, services) {
+    if (fournitures && services) {
+        return "Fournitures et services"
+    } else if (fournitures) return "Fournitures"
+    else if (services) return "Services"
+}

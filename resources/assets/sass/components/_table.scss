@@ -1,0 +1,52 @@
+.my-table {
+    width: 100vw;
+    overflow: scroll;
+  }
+  
+  .my-table th {
+    padding: 0px 0px 20px 8px;
+    font-family: $titleFont;
+    font-weight: 400;
+    color: $highlight;
+  }
+  
+  .my-table td {
+    padding: 18px 10px;
+    min-width: 130px;
+  }
+  
+  .my-table tr:nth-child(even) {
+    background-color: #d3e8e6;
+  }
+  
+  .my-table {
+    font-size: 16px;
+    color: $greyText;
+  }
+  
+  .school-name {
+    color: $greenButton;
+  }
+  
+  .school-name:hover {
+    cursor: pointer;
+    color: $greenButtonHovered;
+  }
+  
+  .my-table .agency {
+    color: $highlight;
+  }
+  
+  @media (min-width: 769px) {
+    .my-table {
+      display: flex;
+      justify-content: center;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .my-table {
+      margin-left: 30px;
+    }
+  }
+  

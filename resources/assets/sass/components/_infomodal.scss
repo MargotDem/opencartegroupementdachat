@@ -1,0 +1,119 @@
+.school-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(75, 81, 80, 0.4);
+    z-index: 95;
+    transition: 0.4s;
+    opacity: 0;
+  }
+  
+  .ReactModal__Overlay--after-open {
+    opacity: 1;
+  }
+  
+  .school-modal-content {
+    position: fixed;
+    top: 400px !important;
+    width: 800px;
+    height: 600px;
+    background: $backgroundColor;
+    overflow: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 2px;
+    outline: none;
+    display: flex;
+    flex-direction: column;
+    font-size: 17px;
+    font-family: $textFont;
+    color: $greyText;
+  }
+  
+  .school-modal-top {
+    width: 100%;
+    flex-grow: 1;
+  }
+  
+  .school-modal-header {
+    margin-top: 15px;
+    margin-left: 20px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 19px;
+    font-weight: bold;
+    font-family: $titleFont;
+  }
+  
+  .school-modal-close {
+    margin-right: 20px;
+    color: $red;
+    font-family: $textFont;
+    font-weight: bold;
+    position: relative;
+    bottom: 8px;
+  }
+  
+  .school-modal-close:hover {
+    cursor: pointer;
+    color: #e55e5e;
+  }
+  
+  .school-modal-top-content {
+    margin-left: 20px;
+    margin-top: 25px;
+    padding-left: 20px;
+    border-left: 1px solid $lightGrayBorder;
+    height: 80px;
+    // font-size: 15px;
+  }
+  
+  .udpate-section {
+    color: $greenButton;
+  }
+  
+  .udpate-section:hover {
+    cursor: pointer;
+    color: $greenButtonHovered;
+  }
+  
+  .update-date-grey {
+    color: $lightGreenishGray;
+  }
+  
+  .update-icon {
+    margin-right: 15px;
+    font-size: 22px;
+  }
+  
+  .school-modal-bottom {
+    width: 100%;
+    flex-grow: 4;
+    background: $blueBackground;
+    padding: 25px 10px 0px 10px;
+  }
+  
+  .school-modal-bottom-sections {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+  }
+  
+  .school-modal-button {
+    width: 120px;
+  }
+  
+  .school-modal-bottom-section>p {
+    margin-bottom: 20px;
+    margin-left: 20px;
+    margin-top: -5px;
+    line-height: 22px;
+    font-weight: 600;
+  }
+
+  .school-modal-bottom-buttons {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }

@@ -3,7 +3,7 @@ import axios from 'axios'
 
 import PageComponent from '../../components/PageComponent'
 import TopSection from '../../components/TopSection'
-// import ResultsTable from '../../components/ResultsTable'
+import ResultsTable from '../../components/ResultsTable'
 
 export default class Schools extends Component {
   constructor (props) {
@@ -28,7 +28,7 @@ export default class Schools extends Component {
       axios.get(requestUrl)
         .then(schools => {
           console.log("response: ", schools)
-          this.setState({ schools: schools.data })
+          this.setState({ schools: schools.data[0] })
         })
         .catch(function (error) {
           console.log("Error: ", error)
@@ -65,12 +65,11 @@ export default class Schools extends Component {
           text={text}
           smallText
         />
-        hey thereee
-        {/* <ResultsTable
+        <ResultsTable
           schools={schools}
           fetchSchools={this.fetchSchools}
           isAdminLogged={isAdminLogged}
-        /> */}
+        />
       </PageComponent>
     )
   }

@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Waypoint } from 'react-waypoint'
 import SimpleReactValidator from 'simple-react-validator';
-import { REGIONS, ACADEMIES, DEPARTEMENTS } from  '../config'
+import { REGIONS, ACADEMIES, DEPARTEMENTS, NOMBRE_ADHERENTS } from  '../config'
 
 export default class Form extends Component {
   constructor(props) {
@@ -298,10 +298,9 @@ export default class Form extends Component {
 
         <select name='nombre_adherents' id='nombre_adherents' onChange={this.handleInputChange}>
           <option value=''>Nombre d’adhérents *</option>
-          <option value="1">1 - 10</option>
-          <option value="2">11 - 50</option>
-          <option value="3">51 - 100</option>
-          <option value="4">+ de 100</option>
+          {NOMBRE_ADHERENTS.map((tier, index) => {
+          return <option value={index + 1}>{tier}</option>
+          })}
         </select>
         {this.validator.message('nombre_adherents', this.state ? this.state.nombre_adherents : '', 'required')}
 
