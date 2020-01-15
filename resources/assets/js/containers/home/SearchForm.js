@@ -91,7 +91,7 @@ export default class SearchForm extends Component {
                         value="fournitures"
                         onChange={this.handleInputChange}
                     />
-                    <label for="fournitures">Uniquement fournitures</label>
+                    <label for="fournitures">Fournitures</label>
                 </div>
 
                 <div className="radio-input">
@@ -102,7 +102,7 @@ export default class SearchForm extends Component {
                         value="services"
                         onChange={this.handleInputChange}
                     />
-                    <label for="services">Uniquement services</label>
+                    <label for="services">Services</label>
                 </div>
 
 

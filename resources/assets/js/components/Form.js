@@ -6,6 +6,10 @@ import { REGIONS, ACADEMIES, DEPARTEMENTS, NOMBRE_ADHERENTS } from  '../config'
 export default class Form extends Component {
   constructor(props) {
     super(props)
+    this.state = {
+      mots_cles_fournitures: [],
+      mots_cles_services: []
+    }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
     this.handleSubmission = this.handleSubmission.bind(this)

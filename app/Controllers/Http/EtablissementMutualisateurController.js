@@ -163,7 +163,6 @@ class EtablissementMutualisateurController {
             adresse,
             code_postal,
             commune,
-            telephone,
             region,
             academie,
             departement
@@ -181,6 +180,7 @@ class EtablissementMutualisateurController {
 
       newEtablissement.code_uai = code_uai
       newEtablissement.email = email
+      newEtablissement.telephone = telephone
       newEtablissement.nombre_adherents = nombre_adherents
       newEtablissement.eple = ((type_adherents === "1" || type_adherents === "3") ? 1 : 0)
       newEtablissement.autres_admins_publiques = ((type_adherents === "2" || type_adherents === "3") ? 1 : 0)
