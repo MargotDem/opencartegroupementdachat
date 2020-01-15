@@ -23,9 +23,14 @@ export default class AddSchool extends Component {
   }
 
   handleSubmission (school) {
+    let { isAdminLogged } = this.props
     console.log("handle submission, school data: ", school)
     let requestUrl = (window.env === 'production' ? '' : '/api/etablissements')
-    axios.post(requestUrl, school)
+    axios.post(requestUrl,
+      {
+        ...school,
+        isAdminLogged
+      })
       .then(response => {
         if (response.status === 200) {
           this.setState({
@@ -33,6 +38,7 @@ export default class AddSchool extends Component {
           })
           console.log(response)
         } else {
+          console.log("no 200 response: ", response)
           this.setState({
             isFormSent: true,
             failure: true

@@ -33,9 +33,6 @@ class EtablissementMutualisateurController {
 
     try {
       const query = request.get()
-      console.log("HEY", Object.keys(query))
-      console.log("HO", Object.values(query))
-
       let sqlConditions = ''
       let motCles = []
 
@@ -129,6 +126,7 @@ class EtablissementMutualisateurController {
    */
   async store({ request, response }) {
     const {
+      isAdminLogged,
       code_uai,
       email,
       nombre_adherents,
@@ -193,7 +191,8 @@ class EtablissementMutualisateurController {
       newEtablissement.fournitures = ((type_marche === "1" || type_marche === "3") ? 1 : 0)
       newEtablissement.infos_complementaires = infos_complementaires
 
-      newEtablissement.status = STATUSES[1]
+      let status = isAdminLogged ? STATUSES[0] : STATUSES[1]
+      newEtablissement.status = status
 
       await newEtablissement.save()
 
@@ -291,7 +290,6 @@ class EtablissementMutualisateurController {
       let timestamp = date.getUTCFullYear() + "-" + month + "-" + date.getUTCDate()
 
       try {
-        console.log("hey", timestamp)
         return await Database
           .table('ocga_mutualisateurs')
           .where('code_uai', params.code_uai)
