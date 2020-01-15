@@ -88,10 +88,10 @@ class EtablissementMutualisateurController {
       from ocga_mutualisateurs
       inner join etablissements ON etablissements.code_uai = ocga_mutualisateurs.code_uai
 
-      inner join ocga_mutualisateurs_departements ON ocga_mutualisateurs.code_uai = ocga_mutualisateurs_departements.code_uai
+      left join ocga_mutualisateurs_departements ON ocga_mutualisateurs.code_uai = ocga_mutualisateurs_departements.code_uai
 
-      inner join ocga_mutualisateurs_mots_cles on ocga_mutualisateurs_mots_cles.code_uai = ocga_mutualisateurs.code_uai
-      inner join ocga_mots_cles on ocga_mots_cles.id = ocga_mutualisateurs_mots_cles.id_mot_cle
+      left join ocga_mutualisateurs_mots_cles on ocga_mutualisateurs_mots_cles.code_uai = ocga_mutualisateurs.code_uai
+      left join ocga_mots_cles on ocga_mots_cles.id = ocga_mutualisateurs_mots_cles.id_mot_cle
 
       WHERE ${sqlConditions}
       group by code_uai

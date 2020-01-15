@@ -1,31 +1,32 @@
 import React, { Component } from 'react'
-// import { withCookies } from 'react-cookie'
+import { withCookies } from 'react-cookie'
 import { Switch, Route, Redirect } from 'react-router-dom'
 import axios from 'axios'
 
 import Home from '../containers/home/Home'
 import AddSchool from '../containers/addSchool/AddSchool'
 import Schools from '../containers/schools/Schools'
+import Admin from '../containers/admin/Admin'
 
 class Body extends Component {
   constructor (props) {
     super(props)
     this.state = { isAdminLogged: false }
-    // this.logUnlogAdmin = this.logUnlogAdmin.bind(this)
+    this.logUnlogAdmin = this.logUnlogAdmin.bind(this)
   }
 
-//   // checking whether admin is connected here because we need it site-wide
-//   componentDidMount () {
-//     const { cookies } = this.props
-//     let isAdminLogged = cookies.get('admin') === 'true'
-//     this.setState({
-//       isAdminLogged
-//     })
-//   }
+  // checking whether admin is connected here because we need it site-wide
+  componentDidMount () {
+    const { cookies } = this.props
+    let isAdminLogged = cookies.get('admin') === 'true'
+    this.setState({
+      isAdminLogged
+    })
+  }
 
-//   logUnlogAdmin (isAdminLogged) {
-//     this.setState({ isAdminLogged })
-//   }
+  logUnlogAdmin (isAdminLogged) {
+    this.setState({ isAdminLogged })
+  }
 
 componentDidMount () {
   let requestUrl = (window.env === 'production' ? '' : '/api/mots-cles')
@@ -88,6 +89,7 @@ componentDidMount () {
       this.buildRoute('/', true, Home, null),
       this.buildRoute('/ajouter-etablissement', false, AddSchool, null),
       this.buildRoute('/etablissements', true, Schools, null),
+      this.buildRoute('/admin', false, Admin, null)
     ]
 
     return (
@@ -107,5 +109,4 @@ componentDidMount () {
   }
 }
 
-// export default withCookies(Body)
-export default Body
+export default withCookies(Body)

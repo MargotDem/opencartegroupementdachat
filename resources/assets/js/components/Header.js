@@ -13,7 +13,7 @@ export default class Header extends Component {
               </div>
               <div className='header__right'>
                 <NavLink to='/ajouter-etablissement'>Ajouter un établissement</NavLink>
-                <NavLink to='/statistiques'>Statistiques</NavLink>
+                {/* <NavLink to='/statistiques'>Statistiques</NavLink> */}
               </div>
               <div className='mobile-menu'>
                 <div className='dropdown'>
@@ -22,7 +22,7 @@ export default class Header extends Component {
                   </a>
                   <div className='dropdown-menu' aria-labelledby='dropdownMenuButton'>
                     <NavLink className='dropdown-item' to='/ajouter-etablissement'>Ajouter un établissement</NavLink>
-                    <NavLink className='dropdown-item' to='/statistiques'>Statistiques</NavLink>
+                    {/* <NavLink className='dropdown-item' to='/statistiques'>Statistiques</NavLink> */}
                   </div>
                 </div>
               </div>

@@ -6,28 +6,47 @@ import TopSection from '../../components/TopSection'
 import ResultsTable from '../../components/ResultsTable'
 
 export default class Schools extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = ({
       schools: []
     })
     this.fetchSchools = this.fetchSchools.bind(this)
+    this.deleteSchool = this.deleteSchool.bind(this)
   }
 
-  componentDidMount () {
+  componentDidMount() {
     this.fetchSchools()
   }
 
-  fetchSchools () {
+  deleteSchool(code_uai) {
+    const { isAdminLogged } = this.props
+    if (isAdminLogged) {
+
+
+      let requestUrl = (window.env === 'production' ? '' : `/api/admin/deleteSchool/${code_uai}`)
+      axios.post(requestUrl)
+        .then(response => {
+          console.log("reponse :", response)
+          this.fetchSchools()
+        })
+        .catch(error => {
+          console.log(error)
+        })
+
+
+    }
+  }
+
+
+  fetchSchools() {
     let pathname = this.props.location.pathname
     if (pathname === '/etablissements') {
       // fetch schools corresponding to search criteria
       let url = this.props.location
-      console.log("url search", url.search)
       const requestUrl = (window.env === 'production' ? '' : '/api/etablissements') + url.search
       axios.get(requestUrl)
         .then(schools => {
-          console.log("response: ", schools)
           this.setState({ schools: schools.data[0] })
         })
         .catch(function (error) {
@@ -48,13 +67,13 @@ export default class Schools extends Component {
     // }
   }
 
-  render () {
+  render() {
     const { schools } = this.state
     const { isAdminLogged } = this.props
     let title = ''
     let text = ''
-      title = 'Établissements correspondant à vos critères de recherche (' + schools.length + ') :'
-      text = 'Vous pouvez visualiser les informations d’un établissement en cliquant sur son nom'
+    title = 'Établissements correspondant à vos critères de recherche (' + schools.length + ') :'
+    text = 'Vous pouvez visualiser les informations d’un établissement en cliquant sur son nom'
 
     schools.length === 0 && (text = 'Il n’y a pas d’établissements correspondant à votre recherche')
 
@@ -69,6 +88,7 @@ export default class Schools extends Component {
           schools={schools}
           fetchSchools={this.fetchSchools}
           isAdminLogged={isAdminLogged}
+          deleteSchool={this.deleteSchool}
         />
       </PageComponent>
     )

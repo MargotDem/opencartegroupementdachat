@@ -19,7 +19,11 @@ export default class ResultsTable extends Component {
         const {
             school,
             fetchSchools,
-            isAdminLogged
+            isAdminLogged,
+            isAdminView,
+            approveAddSchool,
+            rejectAddSchool,
+            deleteSchool
         } = this.props
 
         return (
@@ -37,6 +41,11 @@ export default class ResultsTable extends Component {
                                 school={school}
                                 zoneDeCouverture={this.state.zoneDeCouverture}
                                 fetchSchools={fetchSchools}
+                                isAdminLogged={isAdminLogged}
+                                approveAddSchool={approveAddSchool}
+                                rejectAddSchool={rejectAddSchool}
+                                deleteSchool={deleteSchool}
+                                isAdminView={isAdminView}
                             />
                         </span>
                     </td>

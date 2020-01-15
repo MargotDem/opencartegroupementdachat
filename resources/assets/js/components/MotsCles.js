@@ -21,7 +21,6 @@ export default class MotsCles extends Component {
                         motsClesServices.push(motCle.mot_cle)
                     }
                 })
-                // console.log("response: ", response)
                 this.setState({
                     motsClesFournitures,
                     motsClesServices
@@ -33,7 +32,6 @@ export default class MotsCles extends Component {
     }
     render() {
         let { motsClesFournitures, motsClesServices } = this.state;
-        console.log("mots cles fournitures ", motsClesFournitures)
 
         return <>
             <h6>Fournitures :</h6>

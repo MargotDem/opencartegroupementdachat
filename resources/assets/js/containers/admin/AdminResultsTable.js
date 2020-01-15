@@ -1,16 +1,16 @@
 import React, { Component } from 'react'
-import ResultsSection from './ResultsSection'
-import Table from './Table'
-import Row from "./Row"
+import ResultsSection from '../../components/ResultsSection'
+import Table from '../../components/Table'
+import Row from "../../components/Row"
 
 
-export default class ResultsTable extends Component {
+export default class AdminResultsTable extends Component {
   render () {
     const {
       schools,
-      fetchSchools,
       isAdminLogged,
-      deleteSchool
+      approveAddSchool,
+      rejectAddSchool
     } = this.props
 
     let COLUMNNAMES = ['Code UAI', 'Nom', 'Département', 'Région', 'Académie', 'Zone de couverture', 'Nombre d’adhérents', 'Type d’adhérents', 'Type de marché', '']
@@ -24,12 +24,13 @@ export default class ResultsTable extends Component {
           <Table columnNames={COLUMNNAMES}>
             {
               schools.map(item => {
-                  if (item.status === "added" || item.status === "deletePending") return <Row
-                  school={item}
-                  fetchSchools={fetchSchools}
-                  isAdminLogged={isAdminLogged}
-                  deleteSchool={deleteSchool}
-                />
+                return <Row
+                school={item}
+                isAdminLogged={isAdminLogged}
+                approveAddSchool={approveAddSchool}
+                rejectAddSchool={rejectAddSchool}
+                isAdminView={isAdminLogged}
+            />
               })
             }
           </Table>

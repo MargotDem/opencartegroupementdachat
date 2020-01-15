@@ -50,7 +50,16 @@ export default class App extends Component {
     }
 
     render() {
-        let { modalText, school, zoneDeCouverture } = this.props
+        let {
+            modalText,
+            school,
+            zoneDeCouverture,
+            isAdminLogged,
+            isAdminView,
+            approveAddSchool,
+            rejectAddSchool,
+            deleteSchool
+        } = this.props
         let d = new Date(school.up_to_date)
         let month = (d.getUTCMonth() + 1) < 10 ? "0" + (d.getUTCMonth() + 1) : (d.getUTCMonth() + 1)
         let date = d.getUTCDate() + "-" + month + "-" + d.getUTCFullYear()
@@ -71,20 +80,22 @@ export default class App extends Component {
                             <div className='school-modal-title'>{school.nom + " " + school.code_uai}</div>
                             <div className='school-modal-close' onClick={this.closeModal}>&times;</div>
                         </div>
-                        <div className='school-modal-top-content'>
-                            <p>
-                                Ces informations étaient à jour le :&nbsp;
+                        {
+                            !isAdminView && <div className='school-modal-top-content'>
+                                <p>
+                                    Ces informations étaient à jour le :&nbsp;
                 <span className={date === '31-12-2019' ? 'update-date-grey' : ''}>
-                                    {date}
-                                </span>
-                            </p>
-                            <p className='udpate-section' onClick={this.handleUpdate}>
-                                <i className='fa fa-thumbs-up update-icon' />
-                                <span className='update-message'>
-                                    Je confirme que ces informations sont aujourd’hui à jour
+                                        {date}
+                                    </span>
+                                </p>
+                                <p className='udpate-section' onClick={this.handleUpdate}>
+                                    <i className='fa fa-thumbs-up update-icon' />
+                                    <span className='update-message'>
+                                        Je confirme que ces informations sont aujourd’hui à jour
                 </span>
-                            </p>
-                        </div>
+                                </p>
+                            </div>
+                        }
                     </div>
 
 
@@ -95,8 +106,8 @@ export default class App extends Component {
                                 <p>
                                     <ul>{zoneDeCouverture.map((departement, i) => <li>{departement}</li>)}
                                     </ul></p>
-                                    
-                               
+
+
                                 <h4>Nombre d’adhérents</h4>
                                 <p>{NOMBRE_ADHERENTS[school.nombre_adherents - 1]}</p>
 
@@ -156,20 +167,37 @@ export default class App extends Component {
                             </NavLink>
                             </div>
 
+                            {
+                                isAdminView && <div
+                                    className='school-modal-button my-button my-small-button'
+                                    onClick={() => approveAddSchool(school.code_uai)}
+                                >
 
-                            {/* {
-                          isAdminLogged && <td>
-                            <DeleteSchool
-                              codeUai={school.code_uai}
-                              fetchSchools={fetchSchools}
-                            />
-                          </td>
-                    } */}
+                                    Ajouter
+                        </div>
+                            }
 
-                            <div className='school-modal-button my-button my-small-button'>
+                            {
+                                (isAdminLogged && !isAdminView) && <div
+                                className='school-modal-button my-button my-small-button'
+                                onClick={() => deleteSchool(school.code_uai)}
+                            >
 
                                 Supprimer
                             </div>
+                            }
+
+{
+                                isAdminView && <div
+                                className='school-modal-button my-button my-small-button'
+                                onClick={() => rejectAddSchool(school.code_uai)}
+                            >
+
+                                Rejeter demande d’ajout
+                            </div>
+                            }
+                            
+                            
                         </div>
                     </div>
                 </Modal>

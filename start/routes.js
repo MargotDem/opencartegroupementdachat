@@ -27,4 +27,13 @@ Route.group(() => {
   })
   .prefix('api/')
 
+Route.group(() => {
+  Route.post('login', 'AdminController.login')
+  Route.get('addPending', 'AdminController.addPending')
+  Route.get('deletePending', 'AdminController.deletePending')
+  Route.post('approveAdd/:code_uai', 'AdminController.approveAdd')
+  Route.post('deleteSchool/:code_uai', 'AdminController.deleteSchool')
+})
+.prefix('api/admin/')
+
 Route.on('/').render('welcome')

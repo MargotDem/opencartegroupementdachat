@@ -40,9 +40,6 @@ export default class SearchForm extends Component {
             }
         })
         url = url.substring(0, url.lastIndexOf('&'))
-        console.log("you submitted: ", criteria)
-        console.log("and urrl is:  ", url)
-
         window.location = url
     }
 
