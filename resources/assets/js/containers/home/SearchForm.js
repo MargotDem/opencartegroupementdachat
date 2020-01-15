@@ -4,7 +4,7 @@ import { REGIONS, ACADEMIES, DEPARTEMENTS } from '../../config'
 export default class SearchForm extends Component {
     constructor(props) {
         super(props)
-        this.state = { type_marche: "both" }
+        this.state = {}
         this.handleInputChange = this.handleInputChange.bind(this)
         this.handleKeyPress = this.handleKeyPress.bind(this)
     }
@@ -26,17 +26,14 @@ export default class SearchForm extends Component {
     }
 
     handleSubmission(criteria) {
-        let url =  '#/etablissements?'
+        let url = '#/etablissements?'
         Object.keys(criteria).map(item => {
             if (item === "mots_cles_services" || item === "mots_cles_fournitures") {
                 for (let i = 0; i < criteria[item].length; i++) {
                     url = url + criteria[item][i] + '&'
                 }
             } else {
-                if (!(item === "type_marche" && criteria[item] === "both")) {
-
-                    url = url + item + '=' + criteria[item] + '&'
-                }
+                url = url + item + '=' + criteria[item] + '&'
             }
         })
         url = url.substring(0, url.lastIndexOf('&'))
@@ -62,7 +59,7 @@ export default class SearchForm extends Component {
                 {/* <form method="post"> */}
 
 
-<p>Recherche géographique :</p>
+                <p>Recherche géographique :</p>
                 <select name='region' id='region' onChange={this.handleInputChange}>
                     <option value=''>Région</option>
                     {REGIONS.map((region, index) => <option key={index} value={region}>
@@ -94,7 +91,7 @@ export default class SearchForm extends Component {
                         value="fournitures"
                         onChange={this.handleInputChange}
                     />
-                    <label for="fournitures">Fournitures</label>
+                    <label for="fournitures">Uniquement fournitures</label>
                 </div>
 
                 <div className="radio-input">
@@ -105,19 +102,10 @@ export default class SearchForm extends Component {
                         value="services"
                         onChange={this.handleInputChange}
                     />
-                    <label for="services">Services</label>
+                    <label for="services">Uniquement services</label>
                 </div>
 
-                <div className="radio-input">
-                    <input
-                        type="radio"
-                        id="both"
-                        name="type_marche"
-                        value="both"
-                        onChange={this.handleInputChange}
-                    />
-                    <label for="both">Les deux</label>
-                </div>
+
 
 
                 Recherche par mots clés :
