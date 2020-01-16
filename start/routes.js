@@ -24,6 +24,7 @@ Route.group(() => {
     Route.put('etablissements/:code_uai', 'EtablissementMutualisateurController.update')
     Route.get('departements/:code_uai', 'EtablissementMutualisateurController.getDepartements')
     Route.get('motsCles/:code_uai', 'EtablissementMutualisateurController.getMotsCles')
+    Route.get('etablissements/:code_uai', 'EtablissementMutualisateurController.show')
   })
   .prefix('api/')
 

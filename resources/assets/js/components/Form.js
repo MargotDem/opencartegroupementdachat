@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Waypoint } from 'react-waypoint'
 import SimpleReactValidator from 'simple-react-validator';
-import { REGIONS, ACADEMIES, DEPARTEMENTS, NOMBRE_ADHERENTS } from  '../config'
+import { REGIONS, ACADEMIES, DEPARTEMENTS, NOMBRE_ADHERENTS } from '../config'
 
 export default class Form extends Component {
   constructor(props) {
@@ -69,9 +69,55 @@ export default class Form extends Component {
   }
 
   componentDidMount() {
-    let { form } = this.props
+    let { form, school } = this.props
+    
     if (form === 'changeInfoForm') {
-      this.setState({ info: '' })
+      let type_adherents
+      let type_marche
+      if (school.eple && school.autres_admins_publiques) {
+        type_adherents = "3"
+      } else if (school.eple) {
+        type_adherents = "1"
+      } else {
+        type_adherents = "2"
+      }
+      if (school.fournitures && school.services) {
+        type_marche = "3"
+      } else if (school.fournitures) {
+        type_marche = "1"
+      } else {
+        type_marche = "2"
+      }
+
+      let zone_de_couverture
+      let zone_de_couverture_code_postal = ""
+      let zone_de_couverture_departement = ""
+      let zone_de_couverture_departements = []
+      if (school.ville_couverte) {
+        zone_de_couverture = "1"
+        zone_de_couverture_code_postal = school.ville_couverte
+      } else if (school.departements.length === 1) {
+        zone_de_couverture = "2"
+        zone_de_couverture_departement = school.departements[0].departement
+
+      } else if (school.departements.length > 1) {
+        zone_de_couverture = "3"
+        zone_de_couverture_departements = school.departements.map(dpt => dpt.departement)
+      }
+
+
+      this.setState({
+        info: '',
+        ...school,
+        telephone: school.thisPhone,
+        type_adherents,
+        type_marche,
+        zone_de_couverture,
+        zone_de_couverture_code_postal,
+        zone_de_couverture_departement,
+        zone_de_couverture_departements
+      })
+    
     } else if (form === 'changeFondePvForm') {
       this.setState({ showFondePv: false })
     }
@@ -112,6 +158,17 @@ export default class Form extends Component {
         this.setState({ [field]: list })
       }
     } else {
+      if (field === "type_marche") {
+        if (value === "1") {
+          this.setState({
+            mots_cles_services: []
+          })
+        } else if (value === "2") {
+          this.setState({
+            mots_cles_fournitures: []
+          })
+        }
+      }
       this.setState({
         [field]: value,
       })
@@ -303,7 +360,7 @@ export default class Form extends Component {
         <select name='nombre_adherents' id='nombre_adherents' onChange={this.handleInputChange}>
           <option value=''>Nombre d’adhérents *</option>
           {NOMBRE_ADHERENTS.map((tier, index) => {
-          return <option value={index + 1}>{tier}</option>
+            return <option value={index + 1}>{tier}</option>
           })}
         </select>
         {this.validator.message('nombre_adherents', this.state ? this.state.nombre_adherents : '', 'required')}
@@ -401,24 +458,233 @@ export default class Form extends Component {
     )
   }
 
-  renderChangeAgencyForm() {
-    let { _handleWaypoint } = this.props
+
+  renderChangeInfoForm() {
+    let { _handleWaypoint, motsCles } = this.props
+    console.log("change info form, state : ", this.state)
+    let type_adherents
+    let type_marche
+    let zone_de_couverture
+    if (this.state.type_adherents === "1") {
+      type_adherents = "EPLE"
+    } else if (this.state.type_adherents === "2") {
+      type_adherents = "Autres administrations publiques"
+    } else {
+      type_adherents = "Les deux"
+    }
+    if (this.state.type_marche === "1") {
+      type_marche = "Fournitures"
+    } else if (this.state.type_marche === "2") {
+      type_marche = "Services"
+    } else {
+      type_marche = "Les deux"
+    }
+
+    if (this.state.zone_de_couverture === "1") {
+      zone_de_couverture = "Ville et communes proches"
+    } else if (this.state.zone_de_couverture === "2") {
+      zone_de_couverture = "Départementale"
+    } else if (this.state.zone_de_couverture === "3") {
+      zone_de_couverture = "Interdépartementale"
+    }
+    
     return (
       <form>
+
+
         <input
           type='text'
-          id='code_uai'
-          name='new_agency'
-          placeholder='UAI nouvelle agence'
+          name='nom'
+          id='nom'
+          placeholder='Nom *'
+          value={this.state.nom}
           onChange={this.handleInputChange}
           onKeyPress={this.handleKeyPress}
         />
-        {this.validator.message('', this.state ? this.state.new_agency : '', 'required|alpha_num|max:8|min:8|code_uai')}
+        {this.validator.message('nom', this.state ? this.state.nom : '', 'required|nom')}
+
+
+        <input
+          type='text'
+          name='adresse'
+          id='adresse'
+          placeholder='Adresse *'
+          value={this.state.adresse}
+          onChange={this.handleInputChange}
+          onKeyPress={this.handleKeyPress}
+        />
+        {this.validator.message("adresse", this.state ? this.state.adresse : '', 'required|adresse')}
+
+
+        <input
+          type='text'
+          name='code_postal'
+          id='code_postal'
+          placeholder='Code postal *'
+          value={this.state.code_postal}
+          onChange={this.handleInputChange}
+          onKeyPress={this.handleKeyPress}
+        />
+        {this.validator.message('code_postal', this.state ? this.state.code_postal : '', 'required|code_postal')}
+
+        <input
+          type='text'
+          name='commune'
+          id='commune'
+          placeholder='Commune *'
+          value={this.state.commune}
+          onChange={this.handleInputChange}
+          onKeyPress={this.handleKeyPress}
+        />
+        {this.validator.message('commune', this.state ? this.state.commune : '', 'required|commune')}
 
         <Waypoint
           onEnter={() => { _handleWaypoint(true) }}
           onLeave={() => { _handleWaypoint(false) }}
         />
+
+
+        <select
+          name='departement'
+          id='departement'
+          onChange={this.handleInputChange}
+        >
+          <option value={this.state.departement}>{this.state.departement}</option>
+          {this.renderDepartementSelect()}
+        </select>
+        {this.validator.message('departement', this.state ? this.state.departement : '', 'required')}
+
+
+        <select name='region' id='region' onChange={this.handleInputChange}>
+          <option value={this.state.region}>{this.state.region}</option>
+          {REGIONS.map((region, index) => <option key={index} value={region}>{region}</option>)}
+        </select>
+        {this.validator.message('region', this.state ? this.state.region : '', 'required')}
+
+
+        <select name='academie' id='academie' onChange={this.handleInputChange}>
+          <option value={this.state.academie}>{this.state.academie}</option>
+          {ACADEMIES.map((academie, index) => <option key={index} value={academie}>{academie}</option>)}
+        </select>
+        {this.validator.message('academie', this.state ? this.state.academie : '', 'required')}
+
+        <input
+          type='text'
+          name='telephone'
+          id='telephone'
+          placeholder='Téléphone *'
+          value={this.state.telephone}
+          onChange={this.handleInputChange}
+          onKeyPress={this.handleKeyPress}
+        />
+        {this.validator.message('telephone', this.state ? this.state.telephone : '', 'required|phone')}
+
+        <input
+          type="text"
+          name="email"
+          id="email"
+          placeholder="Email *"
+          value={this.state.email}
+          onChange={this.handleInputChange}
+          onKeyPress={this.handleKeyPress}
+        />
+        {this.validator.message('email', this.state ? this.state.email : '', 'required|email')}
+
+        <select name='nombre_adherents' id='nombre_adherents' onChange={this.handleInputChange}>
+          <option value={this.state.nombre_adherents}>{NOMBRE_ADHERENTS[this.state.nombre_adherents - 1]}</option>
+          {NOMBRE_ADHERENTS.map((tier, index) => {
+            return <option value={index + 1}>{tier}</option>
+          })}
+        </select>
+        {this.validator.message('nombre_adherents', this.state ? this.state.nombre_adherents : '', 'required')}
+
+        <select name="type_adherents" id="type_adherents" onChange={this.handleInputChange}>
+          <option value={this.state.type_adherents}>{type_adherents}</option>
+          <option value=''>Type d’adhérents *</option>
+          <option value="1">EPLE</option>
+          <option value="2">Autres administrations publiques</option>
+          <option value="3">Les deux</option>
+        </select>
+        {this.validator.message('type_adherents', this.state ? this.state.type_adherents : '', 'required')}
+
+        <select name="zone_de_couverture" id="zone_de_couverture" onChange={this.handleInputChange}>
+        <option value={this.state.zone_de_couverture}>{zone_de_couverture}</option>
+          <option value=''>Zone de couverture *</option>
+          <option value="1">Ville et communes proches</option>
+          <option value="2">Départementale</option>
+          <option value="3">Interdépartementale</option>
+        </select>
+        {this.validator.message('zone_de_couverture', this.state ? this.state.zone_de_couverture : '', 'required')}
+
+        {this.state && this.renderZoneDeCouverture()}
+
+
+        <select name="type_marche" id="type_marche" onChange={this.handleInputChange}>
+          <option value={this.state.type_marche}>{type_marche}</option>
+          <option value=''>Type de marché *</option>
+          <option value="1">Fournitures</option>
+          <option value="2">Services</option>
+          <option value="3">Les deux</option>
+        </select>
+        {this.validator.message('type_marche', this.state ? this.state.type_marche : '', 'required')}
+
+        {
+          this.state && (this.state.type_marche === "1" || this.state.type_marche === "3") && <>
+            <div>
+              <ul>
+                {this.state && this.state.mots_cles_fournitures && this.state.mots_cles_fournitures.map((mot, index) => {
+                  return <li>
+                    <span key={index}>{
+                      motsCles.motsClesFournitures.find(el => el.id == mot).mot_cle
+                    }</span>
+                    &nbsp;
+                <span onClick={() => this.removeFromMultipleSelect("mots_cles_fournitures", mot)}>x</span>
+                  </li>
+                })}
+              </ul>
+
+            </div>
+            <select name='mots_cles_fournitures' id='mots_cles_fournitures' onChange={this.handleInputChange}>
+              <option value=''>Mots clés fournitures</option>
+              {motsCles && motsCles.motsClesFournitures.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
+            </select>
+          </>
+        }
+
+        {
+          this.state && (this.state.type_marche === "2" || this.state.type_marche === "3") && <>
+            <div>
+              <ul>
+                {this.state && this.state.mots_cles_services && this.state.mots_cles_services.map((mot, index) => {
+                  return <li>
+                    <span key={index}>{
+                      motsCles.motsClesServices.find(el => el.id == mot).mot_cle
+                    }</span>
+                    &nbsp;
+                <span onClick={() => this.removeFromMultipleSelect("mots_cles_services", mot)}>x</span>
+                  </li>
+                })}
+              </ul>
+
+            </div>
+            <select name='mots_cles_services' id='mots_cles_services' onChange={this.handleInputChange}>
+              <option value=''>Mots clés services</option>
+              {motsCles && motsCles.motsClesServices.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
+            </select>
+          </>
+        }
+
+
+        <textarea
+          name='infos_complementaires'
+          id='infos_complementaires'
+          placeholder='Informations complémentaires'
+          value={this.state.infos_complementaires}
+          onChange={this.handleInputChange}
+        />
+        {this.validator.message('infos_complementaires', this.state ? this.state.infos_complementaires : '', 'infos_complementaires')}
+
+
 
         <div
           className='my-button'
@@ -460,7 +726,7 @@ export default class Form extends Component {
     )
   }
 
-  renderChangeInfoForm() {
+  renderChangeInfoFormOld() {
     let { _handleWaypoint, school } = this.props
 
     // wouldnt this work?
@@ -647,123 +913,18 @@ export default class Form extends Component {
     )
   }
 
-  toggleFondePvSelect(showFondePv) {
-    this.setState({ showFondePv, fondePvSelect: null })
-  }
 
-  renderChangeFondePvForm() {
-    let { _handleWaypoint, school } = this.props
-    let showFondePv = this.state ? this.state.showFondePv : null
 
-    school = school[0]
-    let fondePv = school && school['fondePv']
-    return (
-      <form>
-
-        <input
-          className='change-fondepv-radio'
-          type='radio'
-          name='fondePv'
-          id='no'
-          value='no'
-          onChange={() => { this.toggleFondePvSelect(false) }}
-          defaultChecked
-        />
-        <label className='change-fondepv-label' for='no'>Non</label>
-
-        <input
-          className='change-fondepv-radio'
-          type='radio'
-          name='fondePv'
-          id='yes'
-          value='yes'
-          onChange={() => { this.toggleFondePvSelect(true) }}
-        />
-        <label className='change-fondepv-label' for='yes'>Oui</label>
-
-        {
-          showFondePv && <div>
-            <label for='fondePvSelect'>Part des activités comptables :</label>
-            <select
-              name='fondePvSelect'
-              id='fondePvSelect'
-              onChange={this.handleInputChange}
-            >
-              <option selected value={fondePv}>{fondePv || 'Activités comptables'}</option>
-              <option value='25%'>25%</option>
-              <option value='50%'>50%</option>
-              <option value='75%'>75%</option>
-              <option value='100%'>100%</option>
-            </select>
-          </div>
-        }
-
-        <Waypoint
-          onEnter={() => { _handleWaypoint(true) }}
-          onLeave={() => { _handleWaypoint(false) }}
-        />
-
-        <input
-          type='hidden'
-          name='info'
-        />
-
-        <div
-          className='my-button'
-          name='modifier'
-          onClick={() => { this.handleSubmission(this.state) }}
-        >
-          Modifier
-        </div>
-      </form>
-    )
-  }
-
-  renderChangeMemoForm() {
-    const { _handleWaypoint } = this.props
-    let memo = this.props.school && this.props.school[0]['memo']
-    return (
-      <form>
-        <textarea
-          name='memo'
-          id='memo'
-          placeholder={memo}
-          onChange={this.handleInputChange}
-        />
-
-        {this.validator.message('', this.state ? this.state.memo : '', 'memo')}
-
-        <Waypoint
-          onEnter={() => { _handleWaypoint(true) }}
-          onLeave={() => { _handleWaypoint(false) }}
-        />
-
-        <div
-          className='my-button'
-          name='modifier'
-          onClick={() => { this.handleSubmission(this.state) }}
-        >
-          Modifier
-        </div>
-      </form>
-    )
-  }
 
   render() {
     let { form } = this.props
     switch (form) {
       case 'addSchoolForm':
         return this.renderAddSchoolForm()
-      case 'changeAgencyForm':
-        return this.renderChangeAgencyForm()
       case 'adminForm':
         return this.renderAdminForm()
       case 'changeInfoForm':
         return this.renderChangeInfoForm()
-      case 'changeMemoForm':
-        return this.renderChangeMemoForm()
-      case 'changeFondePvForm':
-        return this.renderChangeFondePvForm()
       default:
         return null
     }

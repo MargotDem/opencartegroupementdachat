@@ -7,6 +7,8 @@ import Home from '../containers/home/Home'
 import AddSchool from '../containers/addSchool/AddSchool'
 import Schools from '../containers/schools/Schools'
 import Admin from '../containers/admin/Admin'
+import ChangeInfo from '../containers/changeInfo/ChangeInfo'
+
 
 class Body extends Component {
   constructor (props) {
@@ -89,7 +91,8 @@ componentDidMount () {
       this.buildRoute('/', true, Home, null),
       this.buildRoute('/ajouter-etablissement', false, AddSchool, null),
       this.buildRoute('/etablissements', true, Schools, null),
-      this.buildRoute('/admin', false, Admin, null)
+      this.buildRoute('/admin', false, Admin, null),
+      this.buildRoute('/etablissements/:uai/modifier-informations', false, ChangeInfo, null),
     ]
 
     return (

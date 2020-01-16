@@ -259,6 +259,25 @@ class EtablissementMutualisateurController {
    * @param {View} ctx.view
    */
   async show({ params, request, response, view }) {
+    try {
+      let etablissement = await Database.raw(`
+      select *, ocga_mutualisateurs.telephone as thisPhone from ocga_mutualisateurs
+      inner join etablissements ON etablissements.code_uai = ocga_mutualisateurs.code_uai
+      where ocga_mutualisateurs.code_uai = ?
+      `, [params.code_uai])
+
+      let departements = await this.getDepartements({ params: { code_uai: params.code_uai}})
+
+      return {
+        etablissement,
+        departements
+      }
+    // return etablissement
+    } catch (error) {
+      return "Error: " + error
+    }
+
+    
   }
 
   /**
