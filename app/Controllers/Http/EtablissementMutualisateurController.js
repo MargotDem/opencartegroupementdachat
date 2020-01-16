@@ -81,7 +81,7 @@ class EtablissementMutualisateurController {
       }
 
       let sqlQuery = `
-      select COUNT(ocga_mutualisateurs.code_uai), ocga_mutualisateurs.code_uai, email, nombre_adherents, eple, autres_admins_publiques, ville_couverte, services, fournitures, ocga_mutualisateurs.infos_complementaires, ocga_mutualisateurs.up_to_date, status, nom, adresse, code_postal, commune, etablissements.departement, region, academie, ocga_mutualisateurs.telephone
+      select COUNT(ocga_mutualisateurs.code_uai), ocga_mutualisateurs.code_uai, email, nombre_adherents, eple, autres_admins_publiques, ville_couverte, services, fournitures, ocga_mutualisateurs.infos_complementaires, ocga_mutualisateurs.up_to_date, ocga_mutualisateurs.status, nom, adresse, code_postal, commune, etablissements.departement, region, academie, ocga_mutualisateurs.telephone
       from ocga_mutualisateurs
       inner join etablissements ON etablissements.code_uai = ocga_mutualisateurs.code_uai
 
