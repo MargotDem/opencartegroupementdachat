@@ -13,8 +13,7 @@ export default class AddPending extends Component {
         this.rejectAddSchool = this.rejectAddSchool.bind(this)
     }
     fetchSchools() {
-        let requestUrl = (window.env === 'production' ? '' : '/api/admin/addPending')
-        axios.get(requestUrl)
+        axios.get('/api/admin/addPending')
             .then(response => {
                 let schools = response.data[0]
                 this.setState({
@@ -30,8 +29,7 @@ export default class AddPending extends Component {
     }
 
     approveAddSchool(code_uai) {
-        let requestUrl = (window.env === 'production' ? '' : `/api/admin/approveAdd/${code_uai}`)
-        axios.post(requestUrl)
+        axios.post(`/api/admin/approveAdd/${code_uai}`)
         .then(response => {
             console.log("reponse :", response)
             this.fetchSchools()
@@ -42,8 +40,7 @@ export default class AddPending extends Component {
     }
 
     rejectAddSchool(code_uai) {
-        let requestUrl = (window.env === 'production' ? '' : `/api/admin/deleteSchool/${code_uai}`)
-        axios.post(requestUrl)
+        axios.post(`/api/admin/deleteSchool/${code_uai}`)
         .then(response => {
             console.log("reponse :", response)
             this.fetchSchools()

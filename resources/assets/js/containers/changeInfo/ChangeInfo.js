@@ -21,8 +21,7 @@ export default class ChangeInfo extends Component {
   componentDidMount () {
 
     let url = this.props.location.pathname.substring(0, 24)
-    let requestUrl = (window.env === 'production' ? '' : '/api') + url
-    axios.get(requestUrl)
+    axios.get(`/api${url}`)
       .then(response => {
           console.log("change info school", response)
           let school = response.data.etablissement[0][0]

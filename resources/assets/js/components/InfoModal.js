@@ -38,8 +38,7 @@ export default class App extends Component {
     handleUpdate() {
         const codeUai = this.props.school.code_uai
         const { fetchSchools } = this.props
-        const requestUrl = (window.env === 'production' ? '' : '/api/etablissements/') + codeUai
-        axios.put(requestUrl, { update: '' })
+        axios.put(`/api/etablissements/${codeUai}`, { update: '' })
             .then(response => {
                 console.log("response: ", response)
                 fetchSchools()

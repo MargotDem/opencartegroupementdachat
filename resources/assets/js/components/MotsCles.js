@@ -9,8 +9,7 @@ export default class MotsCles extends Component {
     componentDidMount() {
         let { code_uai } = this.props;
 
-        const requestUrl = (window.env === 'production' ? '' : '/api/motsCles/' + code_uai)
-        axios.get(requestUrl)
+        axios.get(`/api/motsCles/${code_uai}`)
             .then(response => {
                 let motsClesFournitures = []
                 let motsClesServices = []

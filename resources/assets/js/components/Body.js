@@ -31,8 +31,7 @@ class Body extends Component {
   }
 
 componentDidMount () {
-  let requestUrl = (window.env === 'production' ? '' : '/api/mots-cles')
-  axios.get(requestUrl)
+  axios.get('/api/mots-cles')
     .then(response => {
       this.setState({ motsCles: response.data})
     }).catch(error => {

@@ -18,8 +18,7 @@ class Admin extends Component {
 
   handleSubmission (adminInput) {
     const { cookies, logUnlogAdmin } = this.props
-    const requestUrl = (window.env === 'production' ? '' : '/api/admin/login')
-    axios.post(requestUrl, adminInput)
+    axios.post('/api/admin/login', adminInput)
     .then(response => {
       console.log(response)
       if (response.data.length > 0) {

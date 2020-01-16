@@ -12,8 +12,7 @@ export default class ZoneDeCouverture extends Component {
             return
         }
 
-        const requestUrl = (window.env === 'production' ? '' : '/api/departements/' + code_uai)
-        axios.get(requestUrl)
+        axios.get(`/api/departements/${code_uai}`)
             .then(response => {
                 let departements = response.data[0].map(departement => departement.departement)
                 this.setState({

@@ -22,10 +22,7 @@ export default class Schools extends Component {
   deleteSchool(code_uai) {
     const { isAdminLogged } = this.props
     if (isAdminLogged) {
-
-
-      let requestUrl = (window.env === 'production' ? '' : `/api/admin/deleteSchool/${code_uai}`)
-      axios.post(requestUrl)
+      axios.post(`/api/admin/deleteSchool/${code_uai}`)
         .then(response => {
           console.log("reponse :", response)
           this.fetchSchools()
@@ -33,8 +30,6 @@ export default class Schools extends Component {
         .catch(error => {
           console.log(error)
         })
-
-
     }
   }
 
@@ -44,8 +39,7 @@ export default class Schools extends Component {
     if (pathname === '/etablissements') {
       // fetch schools corresponding to search criteria
       let url = this.props.location
-      const requestUrl = (window.env === 'production' ? '' : '/api/etablissements') + url.search
-      axios.get(requestUrl)
+      axios.get(`/api/etablissements${url.search}`)
         .then(schools => {
           this.setState({ schools: schools.data[0] })
         })
