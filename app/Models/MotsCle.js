@@ -18,6 +18,7 @@ class MotsCle extends Model {
             const motsCles = await MotsCle
                 .query()
                 .where('categorie', categorie)
+                .where('status', 'added')
                 .fetch()
             return motsCles
         } catch (error) {

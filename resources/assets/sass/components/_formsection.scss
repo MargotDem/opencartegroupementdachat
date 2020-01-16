@@ -25,3 +25,14 @@
     color: $red;
   }
   
+ 
+
+  .proposition-mot-cle {
+    padding-left: 60px;
+    font-size: 16px;
+    color: $greyText;
+    input {
+      display: inline;
+      margin-right: 10px;
+    }
+  }

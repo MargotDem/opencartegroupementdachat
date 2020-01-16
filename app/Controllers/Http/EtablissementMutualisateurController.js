@@ -2,8 +2,7 @@
 
 const Database = use('Database')
 const EtablissementMutualisateur = use('App/Models/EtablissementMutualisateur')
-// const Etablissement = use('App/Models/Etablissement')
-
+const MotsCle = use('App/Models/MotsCle')
 
 const STATUSES = [
   "added",
@@ -129,6 +128,8 @@ class EtablissementMutualisateurController {
       type_marche,
       mots_cles_fournitures,
       mots_cles_services,
+      propositions_mots_cles_fournitures,
+      propositions_mots_cles_services,
       infos_complementaires,
       nom,
       adresse,
@@ -229,6 +230,56 @@ class EtablissementMutualisateurController {
       }
     }
 
+    if (propositions_mots_cles_fournitures.length > 0) {
+      try {
+        for (let i = 0; i < propositions_mots_cles_fournitures.length; i++) {
+          let MotCle = await MotsCle.findBy("mot_cle", propositions_mots_cles_fournitures[i])
+          if (!MotCle) {
+            let MotCle = new MotsCle()
+            MotCle.mot_cle = propositions_mots_cles_fournitures[i]
+            MotCle.categorie = 1
+            MotCle.status = "addPending"
+            await MotCle.save()
+
+            await Database.raw(`INSERT INTO ocga_mutualisateurs_mots_cles VALUES (?, ?)
+          ON DUPLICATE KEY UPDATE code_uai = ?
+          `, [code_uai, MotCle.id, code_uai])
+          } else {
+            await Database.raw(`INSERT INTO ocga_mutualisateurs_mots_cles VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE code_uai = ?
+            `, [code_uai, MotCle.id, code_uai])
+          }
+        }
+      } catch (error) {
+        return "Error: " + error
+      }
+    }
+
+    if (propositions_mots_cles_services.length > 0) {
+      try {
+        for (let i = 0; i < propositions_mots_cles_services.length; i++) {
+          let MotCle = await MotsCle.findBy("mot_cle", propositions_mots_cles_services[i])
+          if (!MotCle) {
+            let MotCle = new MotsCle()
+            MotCle.mot_cle = propositions_mots_cles_services[i]
+            MotCle.categorie = 2
+            MotCle.status = "addPending"
+            await MotCle.save()
+
+            await Database.raw(`INSERT INTO ocga_mutualisateurs_mots_cles VALUES (?, ?)
+          ON DUPLICATE KEY UPDATE code_uai = ?
+          `, [code_uai, MotCle.id, code_uai])
+          } else {
+            await Database.raw(`INSERT INTO ocga_mutualisateurs_mots_cles VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE code_uai = ?
+            `, [code_uai, MotCle.id, code_uai])
+          }
+        }
+      } catch (error) {
+        return "Error: " + error
+      }
+    }
+
     if (zone_de_couverture_departement) {
       try {
         await Database.raw(`UPDATE ocga_mutualisateurs SET ville_couverte = NULL WHERE code_uai = ?`, [code_uai])
@@ -309,20 +360,20 @@ class EtablissementMutualisateurController {
       where ocga_mutualisateurs.code_uai = ?
       `, [params.code_uai])
 
-      let departements = await this.getDepartements({ params: { code_uai: params.code_uai}})
-      let motsCles = await this.getMotsCles({ params: { code_uai: params.code_uai }})
+      let departements = await this.getDepartements({ params: { code_uai: params.code_uai } })
+      let motsCles = await this.getMotsCles({ params: { code_uai: params.code_uai } })
 
       return {
         etablissement,
         departements,
         motsCles
       }
-    // return etablissement
+      // return etablissement
     } catch (error) {
       return "Error: " + error
     }
 
-    
+
   }
 
   /**
@@ -351,19 +402,19 @@ class EtablissementMutualisateurController {
       let update = await this.storeOrUpdate({ request, response, storeOrUpdate: "update" })
     }
 
-      let date = new Date();
-      let month = (date.getUTCMonth() + 1) < 10 ? "0" + (date.getUTCMonth() + 1) : (date.getUTCMonth() + 1)
-      let timestamp = date.getUTCFullYear() + "-" + month + "-" + date.getUTCDate()
+    let date = new Date();
+    let month = (date.getUTCMonth() + 1) < 10 ? "0" + (date.getUTCMonth() + 1) : (date.getUTCMonth() + 1)
+    let timestamp = date.getUTCFullYear() + "-" + month + "-" + date.getUTCDate()
 
-      try {
-        await Database
-          .table('ocga_mutualisateurs')
-          .where('code_uai', params.code_uai)
-          .update('up_to_date', timestamp)
-      } catch (error) {
-        return "Error: " + error
-      }
-      return "all good"
+    try {
+      await Database
+        .table('ocga_mutualisateurs')
+        .where('code_uai', params.code_uai)
+        .update('up_to_date', timestamp)
+    } catch (error) {
+      return "Error: " + error
+    }
+    return "all good"
   }
 
   /**

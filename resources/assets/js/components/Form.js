@@ -8,7 +8,9 @@ export default class Form extends Component {
     super(props)
     this.state = {
       mots_cles_fournitures: [],
-      mots_cles_services: []
+      mots_cles_services: [],
+      propositions_mots_cles_fournitures: [],
+      propositions_mots_cles_services: []
     }
     this.handleInputChange = this.handleInputChange.bind(this)
     this.handleKeyPress = this.handleKeyPress.bind(this)
@@ -70,7 +72,7 @@ export default class Form extends Component {
 
   componentDidMount() {
     let { form, school } = this.props
-    
+
     if (form === 'changeInfoForm') {
       let type_adherents
       let type_marche
@@ -107,11 +109,22 @@ export default class Form extends Component {
 
       let motsClesFournitures = []
       let motsClesServices = []
+      let propositionsMotsClesFournitures = []
+      let propositionsMotsClesServices = []
       school.motsCles.forEach(mot => {
+        let motId = mot.id.toString()
         if (mot.categorie === 1) {
-          motsClesFournitures.push(mot.id.toString())
+          if (mot.status === "added") {
+            motsClesFournitures.push(motId)
+          } else {
+            propositionsMotsClesFournitures.push(mot.mot_cle)
+          }
         } else {
-          motsClesServices.push(mot.id.toString())
+          if (mot.status === "added") {
+            motsClesServices.push(motId)
+          } else {
+            propositionsMotsClesServices.push(mot.mot_cle)
+          }
         }
       })
 
@@ -126,9 +139,11 @@ export default class Form extends Component {
         zone_de_couverture_departement,
         zone_de_couverture_departements,
         mots_cles_fournitures: motsClesFournitures,
-        mots_cles_services: motsClesServices
+        mots_cles_services: motsClesServices,
+        propositions_mots_cles_fournitures: propositionsMotsClesFournitures,
+        propositions_mots_cles_services: propositionsMotsClesServices
       })
-    
+
     } else if (form === 'changeFondePvForm') {
       this.setState({ showFondePv: false })
     }
@@ -162,7 +177,9 @@ export default class Form extends Component {
           })
           break
       }
-    } else if (field === "zone_de_couverture_departements" || field === "mots_cles_fournitures" || field === "mots_cles_services") {
+    } else if (field === "zone_de_couverture_departements"
+      || field === "mots_cles_fournitures"
+      || field === "mots_cles_services") {
       let list = this.state[field] || []
       if (list.indexOf(value) === -1) {
         list.push(value)
@@ -172,11 +189,15 @@ export default class Form extends Component {
       if (field === "type_marche") {
         if (value === "1") {
           this.setState({
-            mots_cles_services: []
+            mots_cles_services: [],
+            propositions_mots_cles_services: [],
+            proposition_mot_cle_services: ""
           })
         } else if (value === "2") {
           this.setState({
-            mots_cles_fournitures: []
+            mots_cles_fournitures: [],
+            propositions_mots_cles_fournitures: [],
+            proposition_mot_cle_fournitures: ""
           })
         }
       }
@@ -193,6 +214,23 @@ export default class Form extends Component {
     }
   }
 
+  addMotCleProposition(type) {
+    if (type === "fournitures") {
+      let { proposition_mot_cle_fournitures, propositions_mots_cles_fournitures } = this.state
+      propositions_mots_cles_fournitures.push(proposition_mot_cle_fournitures)
+      this.setState({
+        propositions_mots_cles_fournitures,
+        proposition_mot_cle_fournitures: ""
+      })
+    } else {
+      let { proposition_mot_cle_services, propositions_mots_cles_services } = this.state
+      propositions_mots_cles_services.push(proposition_mot_cle_services)
+      this.setState({
+        propositions_mots_cles_services,
+        proposition_mot_cle_services: ""
+      })
+    }
+  }
   handleSubmission(userInput) {
     let { handleSubmission } = this.props
     console.log("handlesubmission user input", userInput)
@@ -425,6 +463,31 @@ export default class Form extends Component {
               <option value=''>Mots clés fournitures</option>
               {motsCles && motsCles.motsClesFournitures.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
             </select>
+
+            <div className="proposition-mot-cle">
+              Vous pouvez proposer l’ajout de nouveaux mots clés fournitures à notre base :
+            <br />
+            <br />
+              <input
+                type="text"
+                name="proposition_mot_cle_fournitures"
+                id="proposition_mot_cle_fournitures"
+                placeholder="Autre mot clé"
+                value={this.state.proposition_mot_cle_fournitures}
+                onChange={this.handleInputChange}
+              />
+              <span onClick={() => this.addMotCleProposition("fournitures")}>Ajouter</span>
+              <ul>
+                {this.state && this.state.propositions_mots_cles_fournitures.map((mot, index) => {
+                  return <li key={index}>
+                    <span>{mot}</span>
+                    &nbsp;
+                <span onClick={() => this.removeFromMultipleSelect("propositions_mots_cles_fournitures", mot)}>x</span>
+                  </li>
+                })}
+              </ul>
+            </div>
+
           </>
         }
 
@@ -448,6 +511,31 @@ export default class Form extends Component {
               <option value=''>Mots clés services</option>
               {motsCles && motsCles.motsClesServices.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
             </select>
+
+            <div className="proposition-mot-cle">
+              Vous pouvez proposer l’ajout de nouveaux mots clés services à notre base :
+            <br />
+            <br />
+              <input
+                type="text"
+                name="proposition_mot_cle_services"
+                id="proposition_mot_cle_services"
+                placeholder="Autre mot clé"
+                value={this.state.proposition_mot_cle_services}
+                onChange={this.handleInputChange}
+              />
+              <span onClick={() => this.addMotCleProposition("services")}>Ajouter</span>
+              <ul>
+                {this.state && this.state.propositions_mots_cles_services.map((mot, index) => {
+                  return <li key={index}>
+                    <span>{mot}</span>
+                    &nbsp;
+                <span onClick={() => this.removeFromMultipleSelect("propositions_mots_cles_services", mot)}>x</span>
+                  </li>
+                })}
+              </ul>
+            </div>
+
           </>
         }
 
@@ -498,7 +586,7 @@ export default class Form extends Component {
     } else if (this.state.zone_de_couverture === "3") {
       zone_de_couverture = "Interdépartementale"
     }
-    
+
     return (
       <form>
 
@@ -619,7 +707,7 @@ export default class Form extends Component {
         {this.validator.message('type_adherents', this.state ? this.state.type_adherents : '', 'required')}
 
         <select name="zone_de_couverture" id="zone_de_couverture" onChange={this.handleInputChange}>
-        <option value={this.state.zone_de_couverture}>{zone_de_couverture}</option>
+          <option value={this.state.zone_de_couverture}>{zone_de_couverture}</option>
           <option value=''>Zone de couverture *</option>
           <option value="1">Ville et communes proches</option>
           <option value="2">Départementale</option>
@@ -659,6 +747,31 @@ export default class Form extends Component {
               <option value=''>Mots clés fournitures</option>
               {motsCles && motsCles.motsClesFournitures.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
             </select>
+
+
+            <div className="proposition-mot-cle">
+              Vous pouvez proposer l’ajout de nouveaux mots clés fournitures à notre base :
+            <br />
+            <br />
+              <input
+                type="text"
+                name="proposition_mot_cle_fournitures"
+                id="proposition_mot_cle_fournitures"
+                placeholder="Autre mot clé"
+                value={this.state.proposition_mot_cle_fournitures}
+                onChange={this.handleInputChange}
+              />
+              <span onClick={() => this.addMotCleProposition("fournitures")}>Ajouter</span>
+              <ul>
+                {this.state && this.state.propositions_mots_cles_fournitures.map((mot, index) => {
+                  return <li key={index}>
+                    <span>{mot}</span>
+                    &nbsp;
+                <span onClick={() => this.removeFromMultipleSelect("propositions_mots_cles_fournitures", mot)}>x</span>
+                  </li>
+                })}
+              </ul>
+            </div>
           </>
         }
 
@@ -682,6 +795,30 @@ export default class Form extends Component {
               <option value=''>Mots clés services</option>
               {motsCles && motsCles.motsClesServices.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
             </select>
+
+            <div className="proposition-mot-cle">
+              Vous pouvez proposer l’ajout de nouveaux mots clés services à notre base :
+            <br />
+            <br />
+              <input
+                type="text"
+                name="proposition_mot_cle_services"
+                id="proposition_mot_cle_services"
+                placeholder="Autre mot clé"
+                value={this.state.proposition_mot_cle_services}
+                onChange={this.handleInputChange}
+              />
+              <span onClick={() => this.addMotCleProposition("services")}>Ajouter</span>
+              <ul>
+                {this.state && this.state.propositions_mots_cles_services.map((mot, index) => {
+                  return <li key={index}>
+                    <span>{mot}</span>
+                    &nbsp;
+                <span onClick={() => this.removeFromMultipleSelect("propositions_mots_cles_services", mot)}>x</span>
+                  </li>
+                })}
+              </ul>
+            </div>
           </>
         }
 
