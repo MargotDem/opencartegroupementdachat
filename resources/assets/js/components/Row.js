@@ -40,6 +40,7 @@ export default class ResultsTable extends Component {
                                 modalText={school.nom}
                                 school={school}
                                 zoneDeCouverture={this.state.zoneDeCouverture}
+                                ville_couverte={school.ville_couverte}
                                 fetchSchools={fetchSchools}
                                 isAdminLogged={isAdminLogged}
                                 approveAddSchool={approveAddSchool}

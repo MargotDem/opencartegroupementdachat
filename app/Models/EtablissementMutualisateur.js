@@ -13,6 +13,9 @@ class EtablissementMutualisateur extends Model {
     static get updatedAtColumn() {
         return null
     }
+    static get primaryKey () {
+        return 'code_uai'
+    }
 }
 
 module.exports = EtablissementMutualisateur

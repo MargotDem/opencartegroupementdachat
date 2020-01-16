@@ -38,9 +38,8 @@ export default class App extends Component {
     handleUpdate() {
         const codeUai = this.props.school.code_uai
         const { fetchSchools } = this.props
-        axios.put(`/api/etablissements/${codeUai}`, { update: '' })
+        axios.put(`/api/etablissements/${codeUai}`, { upToDateOnly: '' })
             .then(response => {
-                console.log("response: ", response)
                 fetchSchools()
             })
             .catch(error => {
@@ -53,6 +52,7 @@ export default class App extends Component {
             modalText,
             school,
             zoneDeCouverture,
+            ville_couverte,
             isAdminLogged,
             isAdminView,
             approveAddSchool,
@@ -103,8 +103,11 @@ export default class App extends Component {
                             <div className="school-modal-bottom-section">
                                 <h4>Zone de couverture</h4>
                                 <p>
-                                    <ul>{zoneDeCouverture.map((departement, i) => <li>{departement}</li>)}
-                                    </ul></p>
+                                    {ville_couverte
+                                    ? <span>{ville_couverte}</span>
+                                    : <ul>{zoneDeCouverture.map((departement, i) => <li>{departement}</li>)}
+                                    </ul>}
+                                    </p>
 
 
                                 <h4>Nombre d’adhérents</h4>

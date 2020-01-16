@@ -36,22 +36,22 @@ export default class Form extends Component {
         },
         nom: {
           rule: function (val) {
-            return val.length <= 70
+            return val.length < 71
           },
         },
         adresse: {
           rule: function (val) {
-            return val.length <= 70
+            return val.length < 71
           },
         },
         code_postal: {
           rule: function (val) {
-            return val.length <= 6
+            return val.toString().length < 7
           },
         },
         commune: {
           rule: function (val) {
-            return val.length <= 50
+            return val.length < 51
           },
         },
         telephone: {
@@ -61,7 +61,7 @@ export default class Form extends Component {
         },
         infos_complementaires: {
           rule: function (val) {
-            return val.length <= 255
+            return val.length < 256
           }
         }
       }
@@ -105,6 +105,15 @@ export default class Form extends Component {
         zone_de_couverture_departements = school.departements.map(dpt => dpt.departement)
       }
 
+      let motsClesFournitures = []
+      let motsClesServices = []
+      school.motsCles.forEach(mot => {
+        if (mot.categorie === 1) {
+          motsClesFournitures.push(mot.id.toString())
+        } else {
+          motsClesServices.push(mot.id.toString())
+        }
+      })
 
       this.setState({
         info: '',
@@ -115,7 +124,9 @@ export default class Form extends Component {
         zone_de_couverture,
         zone_de_couverture_code_postal,
         zone_de_couverture_departement,
-        zone_de_couverture_departements
+        zone_de_couverture_departements,
+        mots_cles_fournitures: motsClesFournitures,
+        mots_cles_services: motsClesServices
       })
     
     } else if (form === 'changeFondePvForm') {
@@ -184,6 +195,7 @@ export default class Form extends Component {
 
   handleSubmission(userInput) {
     let { handleSubmission } = this.props
+    console.log("handlesubmission user input", userInput)
     if (this.validator.allValid()) {
       handleSubmission(userInput)
     } else {
@@ -461,7 +473,6 @@ export default class Form extends Component {
 
   renderChangeInfoForm() {
     let { _handleWaypoint, motsCles } = this.props
-    console.log("change info form, state : ", this.state)
     let type_adherents
     let type_marche
     let zone_de_couverture
@@ -629,7 +640,7 @@ export default class Form extends Component {
         {this.validator.message('type_marche', this.state ? this.state.type_marche : '', 'required')}
 
         {
-          this.state && (this.state.type_marche === "1" || this.state.type_marche === "3") && <>
+          (this.state && motsCles) && (this.state.type_marche === "1" || this.state.type_marche === "3") && <>
             <div>
               <ul>
                 {this.state && this.state.mots_cles_fournitures && this.state.mots_cles_fournitures.map((mot, index) => {
@@ -652,7 +663,7 @@ export default class Form extends Component {
         }
 
         {
-          this.state && (this.state.type_marche === "2" || this.state.type_marche === "3") && <>
+          (this.state && motsCles) && (this.state.type_marche === "2" || this.state.type_marche === "3") && <>
             <div>
               <ul>
                 {this.state && this.state.mots_cles_services && this.state.mots_cles_services.map((mot, index) => {

@@ -116,15 +116,7 @@ class EtablissementMutualisateurController {
   async create({ request, response, view }) {
   }
 
-  /**
-   * Create/save a new etablissementmutualisateur.
-   * POST etablissementmutualisateurs
-   *
-   * @param {object} ctx
-   * @param {Request} ctx.request
-   * @param {Response} ctx.response
-   */
-  async store({ request, response }) {
+  async storeOrUpdate({ request, response, storeOrUpdate }) {
     const {
       isAdminLogged,
       code_uai,
@@ -176,26 +168,36 @@ class EtablissementMutualisateurController {
     }
 
     try {
-      const newEtablissement = new EtablissementMutualisateur()
-
-      newEtablissement.code_uai = code_uai
-      newEtablissement.email = email
-      newEtablissement.telephone = telephone
-      newEtablissement.nombre_adherents = nombre_adherents
-      newEtablissement.eple = ((type_adherents === "1" || type_adherents === "3") ? 1 : 0)
-      newEtablissement.autres_admins_publiques = ((type_adherents === "2" || type_adherents === "3") ? 1 : 0)
+      let Etablissement = (storeOrUpdate === "store") ? new EtablissementMutualisateur() : await EtablissementMutualisateur.findBy("code_uai", code_uai)
+      Etablissement.code_uai = code_uai
+      Etablissement.email = email
+      Etablissement.telephone = telephone
+      Etablissement.nombre_adherents = nombre_adherents
+      Etablissement.eple = ((type_adherents === "1" || type_adherents === "3") ? 1 : 0)
+      Etablissement.autres_admins_publiques = ((type_adherents === "2" || type_adherents === "3") ? 1 : 0)
       if (zone_de_couverture_code_postal) {
-        newEtablissement.ville_couverte = zone_de_couverture_code_postal
+        Etablissement.ville_couverte = zone_de_couverture_code_postal
       }
-      newEtablissement.services = ((type_marche === "2" || type_marche === "3") ? 1 : 0)
-      newEtablissement.fournitures = ((type_marche === "1" || type_marche === "3") ? 1 : 0)
-      newEtablissement.infos_complementaires = infos_complementaires
+      Etablissement.services = ((type_marche === "2" || type_marche === "3") ? 1 : 0)
+      Etablissement.fournitures = ((type_marche === "1" || type_marche === "3") ? 1 : 0)
+      Etablissement.infos_complementaires = infos_complementaires
 
-      let status = isAdminLogged ? STATUSES[0] : STATUSES[1]
-      newEtablissement.status = status
+      let status
+      if (storeOrUpdate === "update" || isAdminLogged) {
+        status = STATUSES[0]
+      } else {
+        status = STATUSES[1]
+      }
+      Etablissement.status = status
 
-      await newEtablissement.save()
+      await Etablissement.save()
 
+    } catch (error) {
+      return "Error: " + error
+    }
+
+    try {
+      await Database.raw('DELETE FROM ocga_mutualisateurs_mots_cles where code_uai = ?', [code_uai])
     } catch (error) {
       return "Error: " + error
     }
@@ -205,7 +207,9 @@ class EtablissementMutualisateurController {
       try {
         for (let i = 0; i < mots_cles_fournitures.length; i++) {
           await Database
-            .raw('INSERT INTO ocga_mutualisateurs_mots_cles VALUES (?, ?)', [code_uai, mots_cles_fournitures[i]])
+            .raw(`INSERT INTO ocga_mutualisateurs_mots_cles VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE code_uai = ?
+            `, [code_uai, mots_cles_fournitures[i], code_uai])
         }
       } catch (error) {
         return "Error: " + error
@@ -216,7 +220,9 @@ class EtablissementMutualisateurController {
       try {
         for (let i = 0; i < mots_cles_services.length; i++) {
           await Database
-            .raw('INSERT INTO ocga_mutualisateurs_mots_cles VALUES (?, ?)', [code_uai, mots_cles_services[i]])
+            .raw(`INSERT INTO ocga_mutualisateurs_mots_cles VALUES (?, ?)
+            ON DUPLICATE KEY UPDATE code_uai = ?
+            `, [code_uai, mots_cles_services[i], code_uai])
         }
       } catch (error) {
         return "Error: " + error
@@ -225,21 +231,46 @@ class EtablissementMutualisateurController {
 
     if (zone_de_couverture_departement) {
       try {
-        await Database.raw('INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)', [code_uai, zone_de_couverture_departement])
+        await Database.raw(`UPDATE ocga_mutualisateurs SET ville_couverte = NULL WHERE code_uai = ?`, [code_uai])
+      } catch (error) {
+        return "Error: " + error
+      }
+      try {
+        await Database.raw(`DELETE FROM ocga_mutualisateurs_departements WHERE code_uai = ?`, [code_uai])
+      } catch (error) {
+        return "Error: " + error
+      }
+      try {
+        await Database.raw(`INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)
+        `, [code_uai, zone_de_couverture_departement])
       } catch (error) {
         return "Error: " + error
       }
 
     } else if (zone_de_couverture_code_postal) {
       try {
-        await Database.raw('INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)', [code_uai, departement])
+        await Database.raw(`INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)
+        ON DUPLICATE KEY UPDATE code_uai = ?
+        `, [code_uai, departement, code_uai])
       } catch (error) {
         return "Error: " + error
       }
     } else if (zone_de_couverture_departements.length > 0) {
       try {
+        await Database.raw(`UPDATE ocga_mutualisateurs SET ville_couverte = NULL WHERE code_uai = ?`, [code_uai])
+      } catch (error) {
+        return "Error: " + error
+      }
+      try {
+        await Database.raw(`DELETE FROM ocga_mutualisateurs_departements WHERE code_uai = ?`, [code_uai])
+      } catch (error) {
+        return "Error: " + error
+      }
+      try {
         for (let i = 0; i < zone_de_couverture_departements.length; i++) {
-          await Database.raw('INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)', [code_uai, zone_de_couverture_departements[i]])
+          await Database.raw(`INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)
+          ON DUPLICATE KEY UPDATE code_uai = ?
+          `, [code_uai, zone_de_couverture_departements[i], code_uai])
         }
       } catch (error) {
         return "Error: " + error
@@ -247,6 +278,18 @@ class EtablissementMutualisateurController {
     }
 
     return "response: " + response
+  }
+
+  /**
+   * Create/save a new etablissementmutualisateur.
+   * POST etablissementmutualisateurs
+   *
+   * @param {object} ctx
+   * @param {Request} ctx.request
+   * @param {Response} ctx.response
+   */
+  async store({ request, response }) {
+    return this.storeOrUpdate({ request, response, storeOrUpdate: "store" })
   }
 
   /**
@@ -267,10 +310,12 @@ class EtablissementMutualisateurController {
       `, [params.code_uai])
 
       let departements = await this.getDepartements({ params: { code_uai: params.code_uai}})
+      let motsCles = await this.getMotsCles({ params: { code_uai: params.code_uai }})
 
       return {
         etablissement,
-        departements
+        departements,
+        motsCles
       }
     // return etablissement
     } catch (error) {
@@ -302,22 +347,23 @@ class EtablissementMutualisateurController {
    */
   async update({ params, request, response }) {
     const query = request.all()
-    if ("update" in query) {
+    if (!("upToDateOnly" in query)) {
+      let update = await this.storeOrUpdate({ request, response, storeOrUpdate: "update" })
+    }
 
       let date = new Date();
       let month = (date.getUTCMonth() + 1) < 10 ? "0" + (date.getUTCMonth() + 1) : (date.getUTCMonth() + 1)
       let timestamp = date.getUTCFullYear() + "-" + month + "-" + date.getUTCDate()
 
       try {
-        return await Database
+        await Database
           .table('ocga_mutualisateurs')
           .where('code_uai', params.code_uai)
           .update('up_to_date', timestamp)
       } catch (error) {
         return "Error: " + error
       }
-
-    }
+      return "all good"
   }
 
   /**
