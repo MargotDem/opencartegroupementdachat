@@ -17,5 +17,5 @@ database/*.sqlite
 .idea
 
 # webpack output
-public/app.css
-public/app.js
+#public/app.css
+#public/app.js
