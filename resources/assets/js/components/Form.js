@@ -473,7 +473,7 @@ export default class Form extends Component {
                 value={this.state.proposition_mot_cle_fournitures}
                 onChange={this.handleInputChange}
               />
-              <span onClick={() => this.addMotCleProposition("fournitures")}>Ajouter</span>
+              <span className="add-mot-cle" onClick={() => this.addMotCleProposition("fournitures")}>Ajouter</span>
               <ul>
                 {this.state && this.state.propositions_mots_cles_fournitures.map((mot, index) => {
                   return <li key={index}>
@@ -521,7 +521,7 @@ export default class Form extends Component {
                 value={this.state.proposition_mot_cle_services}
                 onChange={this.handleInputChange}
               />
-              <span onClick={() => this.addMotCleProposition("services")}>Ajouter</span>
+              <span className="add-mot-cle" onClick={() => this.addMotCleProposition("services")}>Ajouter</span>
               <ul>
                 {this.state && this.state.propositions_mots_cles_services.map((mot, index) => {
                   return <li key={index}>
@@ -754,7 +754,7 @@ export default class Form extends Component {
                 value={this.state.proposition_mot_cle_fournitures}
                 onChange={this.handleInputChange}
               />
-              <span onClick={() => this.addMotCleProposition("fournitures")}>Ajouter</span>
+              <span className="add-mot-cle" onClick={() => this.addMotCleProposition("fournitures")}>Ajouter</span>
               <ul>
                 {this.state && this.state.propositions_mots_cles_fournitures.map((mot, index) => {
                   return <li key={index}>
@@ -803,7 +803,7 @@ export default class Form extends Component {
                 value={this.state.proposition_mot_cle_services}
                 onChange={this.handleInputChange}
               />
-              <span onClick={() => this.addMotCleProposition("services")}>Ajouter</span>
+              <span className="add-mot-cle" onClick={() => this.addMotCleProposition("services")}>Ajouter</span>
               <ul>
                 {this.state && this.state.propositions_mots_cles_services.map((mot, index) => {
                   return <li key={index}>

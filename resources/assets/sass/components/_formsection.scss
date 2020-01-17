@@ -36,3 +36,13 @@
       margin-right: 10px;
     }
   }
+
+  .add-mot-cle {
+    border-radius: 2px;
+    border: 1px solid $greenButton !important;
+    padding: 3px;
+    color: $greenButton;
+    &:hover {
+      cursor: pointer;
+    }
+  }
