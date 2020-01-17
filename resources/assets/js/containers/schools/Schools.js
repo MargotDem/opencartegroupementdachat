@@ -40,8 +40,9 @@ export default class Schools extends Component {
       // fetch schools corresponding to search criteria
       let url = this.props.location
       axios.get(`/api/etablissements${url.search}`)
-        .then(schools => {
-          this.setState({ schools: schools.data[0] })
+        .then(response => {
+          console.log("response", response)
+          this.setState({ schools: response.data[0] })
         })
         .catch(function (error) {
           console.log("Error: ", error)

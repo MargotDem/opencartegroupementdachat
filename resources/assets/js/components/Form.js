@@ -27,7 +27,7 @@ export default class Form extends Component {
         commune: 'La commune ne doit pas dépasser 50 caractères',
         code_postal: 'Le code postal ne doit pas dépasser 6 caractères',
         adresse: 'L’adresse ne doit pas dépasser 70 caractères',
-        phone: 'Le téléphone doit être un numéro valide',
+        telephone: 'Le téléphone doit être un numéro valide',
         email: "L'adresse email doit être valide"
       },
       validators: {
@@ -58,7 +58,7 @@ export default class Form extends Component {
         },
         telephone: {
           rule: function (val) {
-            return validator.helpers.testRegex(val, /(\+?\d{0,4})?\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{3}\)?)\s?-?\s?(\(?\d{4}\)?)/)
+            return (val.length < 15)
           }
         },
         infos_complementaires: {
@@ -80,14 +80,14 @@ export default class Form extends Component {
         type_adherents = "3"
       } else if (school.eple) {
         type_adherents = "1"
-      } else {
+      } else if (school.autres_admins_publiques) {
         type_adherents = "2"
       }
       if (school.fournitures && school.services) {
         type_marche = "3"
       } else if (school.fournitures) {
         type_marche = "1"
-      } else {
+      } else if (school.services) {
         type_marche = "2"
       }
 
@@ -391,60 +391,62 @@ export default class Form extends Component {
           type='text'
           name='telephone'
           id='telephone'
-          placeholder='Téléphone *'
+          placeholder='Téléphone'
           onChange={this.handleInputChange}
           onKeyPress={this.handleKeyPress}
         />
-        {this.validator.message('telephone', this.state ? this.state.telephone : '', 'required|phone')}
+        {this.validator.message('telephone', this.state ? this.state.telephone : '', 'telephone')}
 
         <input
           type="text"
           name="email"
           id="email"
-          placeholder="Email *"
+          placeholder="Email"
           onChange={this.handleInputChange}
           onKeyPress={this.handleKeyPress}
         />
-        {this.validator.message('email', this.state ? this.state.email : '', 'required|email')}
+        {this.validator.message('email', this.state ? this.state.email : '', 'email')}
 
         <select name='nombre_adherents' id='nombre_adherents' onChange={this.handleInputChange}>
-          <option value=''>Nombre d’adhérents *</option>
+          <option value=''>Nombre d’adhérents</option>
           {NOMBRE_ADHERENTS.map((tier, index) => {
             return <option value={index + 1}>{tier}</option>
           })}
         </select>
-        {this.validator.message('nombre_adherents', this.state ? this.state.nombre_adherents : '', 'required')}
 
         <select name="type_adherents" id="type_adherents" onChange={this.handleInputChange}>
-          <option value=''>Type d’adhérents *</option>
+          <option value=''>Type d’adhérents</option>
           <option value="1">EPLE</option>
           <option value="2">Autres administrations publiques</option>
           <option value="3">Les deux</option>
         </select>
-        {this.validator.message('type_adherents', this.state ? this.state.type_adherents : '', 'required')}
 
 
         <select name="zone_de_couverture" id="zone_de_couverture" onChange={this.handleInputChange}>
-          <option value=''>Zone de couverture *</option>
+          <option value=''>Zone de couverture</option>
           <option value="1">Ville et communes proches</option>
           <option value="2">Départementale</option>
           <option value="3">Interdépartementale</option>
         </select>
-        {this.validator.message('zone_de_couverture', this.state ? this.state.zone_de_couverture : '', 'required')}
 
         {this.state && this.renderZoneDeCouverture()}
 
 
         <select name="type_marche" id="type_marche" onChange={this.handleInputChange}>
-          <option value=''>Type de marché *</option>
+          <option value=''>Type de marché</option>
           <option value="1">Fournitures</option>
           <option value="2">Services</option>
           <option value="3">Les deux</option>
         </select>
-        {this.validator.message('type_marche', this.state ? this.state.type_marche : '', 'required')}
 
         {
           this.state && (this.state.type_marche === "1" || this.state.type_marche === "3") && <>
+            
+            <select name='mots_cles_fournitures' id='mots_cles_fournitures' onChange={this.handleInputChange}>
+              <option value=''>Mots clés fournitures</option>
+              {motsCles && motsCles.motsClesFournitures.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
+            </select>
+
             <div>
               <ul>
                 {this.state && this.state.mots_cles_fournitures && this.state.mots_cles_fournitures.map((mot, index) => {
@@ -457,12 +459,7 @@ export default class Form extends Component {
                   </li>
                 })}
               </ul>
-
             </div>
-            <select name='mots_cles_fournitures' id='mots_cles_fournitures' onChange={this.handleInputChange}>
-              <option value=''>Mots clés fournitures</option>
-              {motsCles && motsCles.motsClesFournitures.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
-            </select>
 
             <div className="proposition-mot-cle">
               Vous pouvez proposer l’ajout de nouveaux mots clés fournitures à notre base :
@@ -493,6 +490,11 @@ export default class Form extends Component {
 
         {
           this.state && (this.state.type_marche === "2" || this.state.type_marche === "3") && <>
+            <select name='mots_cles_services' id='mots_cles_services' onChange={this.handleInputChange}>
+              <option value=''>Mots clés services</option>
+              {motsCles && motsCles.motsClesServices.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
+            </select>
+
             <div>
               <ul>
                 {this.state && this.state.mots_cles_services && this.state.mots_cles_services.map((mot, index) => {
@@ -505,12 +507,7 @@ export default class Form extends Component {
                   </li>
                 })}
               </ul>
-
             </div>
-            <select name='mots_cles_services' id='mots_cles_services' onChange={this.handleInputChange}>
-              <option value=''>Mots clés services</option>
-              {motsCles && motsCles.motsClesServices.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
-            </select>
 
             <div className="proposition-mot-cle">
               Vous pouvez proposer l’ajout de nouveaux mots clés services à notre base :
@@ -568,14 +565,14 @@ export default class Form extends Component {
       type_adherents = "EPLE"
     } else if (this.state.type_adherents === "2") {
       type_adherents = "Autres administrations publiques"
-    } else {
+    } else if (this.state.type_adherents === "3") {
       type_adherents = "Les deux"
     }
     if (this.state.type_marche === "1") {
       type_marche = "Fournitures"
     } else if (this.state.type_marche === "2") {
       type_marche = "Services"
-    } else {
+    } else if (this.state.type_marche === "3") {
       type_marche = "Les deux"
     }
 
@@ -671,64 +668,66 @@ export default class Form extends Component {
           type='text'
           name='telephone'
           id='telephone'
-          placeholder='Téléphone *'
+          placeholder='Téléphone'
           value={this.state.telephone}
           onChange={this.handleInputChange}
           onKeyPress={this.handleKeyPress}
         />
-        {this.validator.message('telephone', this.state ? this.state.telephone : '', 'required|phone')}
+        {this.validator.message('telephone', this.state ? this.state.telephone : '', 'telephone')}
 
         <input
           type="text"
           name="email"
           id="email"
-          placeholder="Email *"
+          placeholder="Email"
           value={this.state.email}
           onChange={this.handleInputChange}
           onKeyPress={this.handleKeyPress}
         />
-        {this.validator.message('email', this.state ? this.state.email : '', 'required|email')}
+        {this.validator.message('email', this.state ? this.state.email : '', 'email')}
 
+        Nombre d’adhérents
         <select name='nombre_adherents' id='nombre_adherents' onChange={this.handleInputChange}>
           <option value={this.state.nombre_adherents}>{NOMBRE_ADHERENTS[this.state.nombre_adherents - 1]}</option>
           {NOMBRE_ADHERENTS.map((tier, index) => {
             return <option value={index + 1}>{tier}</option>
           })}
         </select>
-        {this.validator.message('nombre_adherents', this.state ? this.state.nombre_adherents : '', 'required')}
 
+        Type d’adhérents
         <select name="type_adherents" id="type_adherents" onChange={this.handleInputChange}>
           <option value={this.state.type_adherents}>{type_adherents}</option>
-          <option value=''>Type d’adhérents *</option>
           <option value="1">EPLE</option>
           <option value="2">Autres administrations publiques</option>
           <option value="3">Les deux</option>
         </select>
-        {this.validator.message('type_adherents', this.state ? this.state.type_adherents : '', 'required')}
 
+        Zone de couverture
         <select name="zone_de_couverture" id="zone_de_couverture" onChange={this.handleInputChange}>
           <option value={this.state.zone_de_couverture}>{zone_de_couverture}</option>
-          <option value=''>Zone de couverture *</option>
           <option value="1">Ville et communes proches</option>
           <option value="2">Départementale</option>
           <option value="3">Interdépartementale</option>
         </select>
-        {this.validator.message('zone_de_couverture', this.state ? this.state.zone_de_couverture : '', 'required')}
 
         {this.state && this.renderZoneDeCouverture()}
 
-
+        Type de marché
         <select name="type_marche" id="type_marche" onChange={this.handleInputChange}>
           <option value={this.state.type_marche}>{type_marche}</option>
-          <option value=''>Type de marché *</option>
           <option value="1">Fournitures</option>
           <option value="2">Services</option>
           <option value="3">Les deux</option>
         </select>
-        {this.validator.message('type_marche', this.state ? this.state.type_marche : '', 'required')}
 
         {
           (this.state && motsCles) && (this.state.type_marche === "1" || this.state.type_marche === "3") && <>
+            
+            <select name='mots_cles_fournitures' id='mots_cles_fournitures' onChange={this.handleInputChange}>
+              <option value=''>Mots clés fournitures</option>
+              {motsCles && motsCles.motsClesFournitures.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
+            </select>
+
             <div>
               <ul>
                 {this.state && this.state.mots_cles_fournitures && this.state.mots_cles_fournitures.map((mot, index) => {
@@ -741,13 +740,7 @@ export default class Form extends Component {
                   </li>
                 })}
               </ul>
-
             </div>
-            <select name='mots_cles_fournitures' id='mots_cles_fournitures' onChange={this.handleInputChange}>
-              <option value=''>Mots clés fournitures</option>
-              {motsCles && motsCles.motsClesFournitures.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
-            </select>
-
 
             <div className="proposition-mot-cle">
               Vous pouvez proposer l’ajout de nouveaux mots clés fournitures à notre base :
@@ -777,6 +770,12 @@ export default class Form extends Component {
 
         {
           (this.state && motsCles) && (this.state.type_marche === "2" || this.state.type_marche === "3") && <>
+           
+            <select name='mots_cles_services' id='mots_cles_services' onChange={this.handleInputChange}>
+              <option value=''>Mots clés services</option>
+              {motsCles && motsCles.motsClesServices.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
+            </select>
+
             <div>
               <ul>
                 {this.state && this.state.mots_cles_services && this.state.mots_cles_services.map((mot, index) => {
@@ -791,11 +790,7 @@ export default class Form extends Component {
               </ul>
 
             </div>
-            <select name='mots_cles_services' id='mots_cles_services' onChange={this.handleInputChange}>
-              <option value=''>Mots clés services</option>
-              {motsCles && motsCles.motsClesServices.map((mot, index) => <option key={index} value={mot.id}>{mot.mot_cle}</option>)}
-            </select>
-
+            
             <div className="proposition-mot-cle">
               Vous pouvez proposer l’ajout de nouveaux mots clés services à notre base :
             <br />

@@ -89,7 +89,7 @@ class EtablissementMutualisateurController {
       left join ocga_mutualisateurs_mots_cles on ocga_mutualisateurs_mots_cles.code_uai = ocga_mutualisateurs.code_uai
       left join ocga_mots_cles on ocga_mots_cles.id = ocga_mutualisateurs_mots_cles.id_mot_cle
 
-      WHERE ${sqlConditions}
+      WHERE (ocga_mutualisateurs.status = 'added' OR ocga_mutualisateurs.status = 'deletePending') AND ${sqlConditions}
       group by code_uai
       `
 
@@ -122,6 +122,7 @@ class EtablissementMutualisateurController {
       email,
       nombre_adherents,
       type_adherents,
+      zone_de_couverture,
       zone_de_couverture_code_postal,
       zone_de_couverture_departement,
       zone_de_couverture_departements,
@@ -280,7 +281,10 @@ class EtablissementMutualisateurController {
       }
     }
 
+  if (zone_de_couverture) {
+      
     if (zone_de_couverture_departement) {
+  
       try {
         await Database.raw(`UPDATE ocga_mutualisateurs SET ville_couverte = NULL WHERE code_uai = ?`, [code_uai])
       } catch (error) {
@@ -299,6 +303,8 @@ class EtablissementMutualisateurController {
       }
 
     } else if (zone_de_couverture_code_postal) {
+
+
       try {
         await Database.raw(`INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)
         ON DUPLICATE KEY UPDATE code_uai = ?
@@ -306,7 +312,9 @@ class EtablissementMutualisateurController {
       } catch (error) {
         return "Error: " + error
       }
-    } else if (zone_de_couverture_departements.length > 0) {
+    } else if (zone_de_couverture_departements && zone_de_couverture_departements.length > 0) {
+ 
+
       try {
         await Database.raw(`UPDATE ocga_mutualisateurs SET ville_couverte = NULL WHERE code_uai = ?`, [code_uai])
       } catch (error) {
@@ -327,6 +335,15 @@ class EtablissementMutualisateurController {
         return "Error: " + error
       }
     }
+  } else {
+    try {
+      await Database.raw(`INSERT INTO ocga_mutualisateurs_departements VALUES (?, ?)
+      ON DUPLICATE KEY UPDATE code_uai = ?
+      `, [code_uai, departement, code_uai])
+    } catch (error) {
+      return "Error: " + error
+    }
+  }
 
     return "response: " + response
   }
