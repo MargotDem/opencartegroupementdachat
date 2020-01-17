@@ -4,7 +4,7 @@ TopContent
 
 .top-content-box {
     position: relative;
-    height: 750px;
+    margin-bottom: 100px;
   }
   
   .top-content-title {
@@ -62,11 +62,16 @@ TopContent
   */
   
   .search-form-box {
-    height: 1100px;
     background-color: $blueBackground;
     z-index: 300;
     -webkit-transition: 0.5s; /* Safari */
     transition: 0.5s;
+  }
+
+  @media (max-width: 600px) {
+    .search-form-box {
+      padding-left: 30px;
+    }
   }
   
   .search-form-title {
@@ -85,6 +90,7 @@ TopContent
     width: 100%;
     font-size: 20px;
     font-family: $textFont;
+    padding-bottom: 90px;
   }
   
   .search-form-small-device {
@@ -299,14 +305,16 @@ TopContent
     }
   }
   
+  @media (max-width: 425px) {
+    .top-content-box {
+      margin-bottom: 200px;
+     }
+  }
+
   @media (max-width: 768px) {
     /*
     TopContent
     */
-  
-    .top-content-box {
-      height: 90vh;
-    }
   
     .top-content-title {
       margin-top: 200px;
@@ -320,18 +328,14 @@ TopContent
     }
   
     .sextant-box {
-      width: 160px;
-      top: 100px;
-      right: 0px;
+      display: none;
     }
   
     /*
     SearchFormSection
     */
   
-    .search-form-box {
-      height: 900px;
-    }
+   
   
     .search-form-title {
       padding: 0px 30px;
@@ -356,15 +360,10 @@ TopContent
     */
   
     .about-box {
-      // height: 1700px;
       height: auto;
     }
   
-    #img2 {
-      display: none;
-    }
-  
-    #img1 {
+    #img1, #img2, #img3 {
       display: none;
     }
   

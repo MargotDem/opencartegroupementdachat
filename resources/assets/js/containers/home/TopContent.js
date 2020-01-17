@@ -20,7 +20,7 @@ export default class TopContent extends Component {
         <div className='container'>
           <div className='row'>
             <div className='top-content-title'><span className='highlight'>Bienvenue sur Open Carte Groupement d’Achats</span></div>
-            <div className={'col-sm-6 top-content-text-box' + (scrolledPast ? ' top-content-text-box-expand' : '')}>
+            <div className='col-md-8 col-lg-8 col-xl-6 top-content-text-box'>
               <div className='top-content-text'>
 
                 Vous êtes gestionnaire d’EPLE ou coordonnateur d’un groupement d’achats :

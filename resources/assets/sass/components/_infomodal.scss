@@ -17,7 +17,7 @@
   .school-modal-content {
     position: fixed;
     top: 400px !important;
-    width: 800px;
+    width: 70%;
     height: 600px;
     background: $backgroundColor;
     overflow: auto;
@@ -29,6 +29,12 @@
     font-size: 17px;
     font-family: $textFont;
     color: $greyText;
+  }
+
+  @media (max-width: 1200px) {
+    .school-modal-content {
+      width: 90%;
+    }
   }
   
   .school-modal-top {
@@ -65,8 +71,6 @@
     margin-top: 25px;
     padding-left: 20px;
     border-left: 1px solid $lightGrayBorder;
-    height: 80px;
-    // font-size: 15px;
   }
   
   .udpate-section {
@@ -96,11 +100,16 @@
   .school-modal-bottom-sections {
     width: 100%;
     display: flex;
+    flex-wrap: wrap;
     justify-content: space-around;
   }
   
   .school-modal-button {
     width: 120px;
+  }
+
+  .school-modal-bottom-section {
+    max-width: 250px;
   }
 
   .school-modal-bottom-section>p {
