@@ -180,3 +180,12 @@ h3, h5, h6 {
     margin-right: auto;
     margin-left: auto;
   }
+
+  .database-connection-error {
+    height: 80vh;
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+  }

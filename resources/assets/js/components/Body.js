@@ -13,7 +13,10 @@ import ChangeInfo from '../containers/changeInfo/ChangeInfo'
 class Body extends Component {
   constructor (props) {
     super(props)
-    this.state = { isAdminLogged: false }
+    this.state = {
+      isAdminLogged: false,
+      noDatabaseConnection: false
+    }
     this.logUnlogAdmin = this.logUnlogAdmin.bind(this)
   }
 
@@ -33,7 +36,11 @@ class Body extends Component {
 componentDidMount () {
   axios.get('/api/mots-cles')
     .then(response => {
-      this.setState({ motsCles: response.data})
+      if (!response.data.motsClesFournitures["errno"]) {
+        this.setState({ motsCles: response.data})
+      } else {
+        this.setState({ noDatabaseConnection: true })
+      }
     }).catch(error => {
       console.log(error)
     })
@@ -94,6 +101,12 @@ componentDidMount () {
       this.buildRoute('/etablissements/:uai/modifier-informations', false, ChangeInfo, null),
     ]
 
+    if (this.state.noDatabaseConnection) {
+      return <div className="database-connection-error">
+        Il y a eu un problème avec la connection à la base de données
+      </div>
+    }
+    
     return (
       <div>
         <Switch>
