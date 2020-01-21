@@ -11,7 +11,7 @@ import ChangeInfo from '../containers/changeInfo/ChangeInfo'
 
 
 class Body extends Component {
-  constructor (props) {
+  constructor(props) {
     super(props)
     this.state = {
       isAdminLogged: false,
@@ -20,33 +20,30 @@ class Body extends Component {
     this.logUnlogAdmin = this.logUnlogAdmin.bind(this)
   }
 
+  logUnlogAdmin(isAdminLogged) {
+    this.setState({ isAdminLogged })
+  }
+
   // checking whether admin is connected here because we need it site-wide
-  componentDidMount () {
+  componentDidMount() {
     const { cookies } = this.props
     let isAdminLogged = cookies.get('admin') === 'true'
     this.setState({
       isAdminLogged
     })
+    axios.get('/api/mots-cles')
+      .then(response => {
+        if (!response.data.motsClesFournitures["errno"]) {
+          this.setState({ motsCles: response.data })
+        } else {
+          this.setState({ noDatabaseConnection: true })
+        }
+      }).catch(error => {
+        console.log(error)
+      })
   }
 
-  logUnlogAdmin (isAdminLogged) {
-    this.setState({ isAdminLogged })
-  }
-
-componentDidMount () {
-  axios.get('/api/mots-cles')
-    .then(response => {
-      if (!response.data.motsClesFournitures["errno"]) {
-        this.setState({ motsCles: response.data})
-      } else {
-        this.setState({ noDatabaseConnection: true })
-      }
-    }).catch(error => {
-      console.log(error)
-    })
-}
-
-  buildRoute (path, isExact, Component, title) {
+  buildRoute(path, isExact, Component, title) {
     let routeObject = {
       'path': path,
       'isExact': isExact,
@@ -56,7 +53,7 @@ componentDidMount () {
     return routeObject
   }
 
-  renderRoute (routeObject, index) {
+  renderRoute(routeObject, index) {
     const dynamicTitle = routeObject.title ? (routeObject.title + ' - Open Carte Comptable') : 'Open Carte Comptable'
     const Component = routeObject.Component
     const { isAdminLogged } = this.state
@@ -78,7 +75,7 @@ componentDidMount () {
     )
   }
 
-  renderRedirect (path, isExact, redirect) {
+  renderRedirect(path, isExact, redirect) {
     return (
       <Route
         exact={isExact}
@@ -92,7 +89,7 @@ componentDidMount () {
     )
   }
 
-  render () {
+  render() {
     const ROUTES = [
       this.buildRoute('/', true, Home, null),
       this.buildRoute('/ajouter-etablissement', false, AddSchool, null),
@@ -106,7 +103,7 @@ componentDidMount () {
         Il y a eu un problème avec la connection à la base de données
       </div>
     }
-    
+
     return (
       <div>
         <Switch>
