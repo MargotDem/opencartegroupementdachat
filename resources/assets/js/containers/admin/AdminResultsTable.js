@@ -9,8 +9,11 @@ export default class AdminResultsTable extends Component {
     const {
       schools,
       isAdminLogged,
+      adminView,
       approveAddSchool,
-      rejectAddSchool
+      rejectAddSchool,
+      deleteSchool,
+      rejectDeleteSchool
     } = this.props
 
     let COLUMNNAMES = ['Code UAI', 'Nom', 'Département', 'Région', 'Académie', 'Zone de couverture', 'Nombre d’adhérents', 'Type d’adhérents', 'Type de marché', '']
@@ -29,7 +32,9 @@ export default class AdminResultsTable extends Component {
                 isAdminLogged={isAdminLogged}
                 approveAddSchool={approveAddSchool}
                 rejectAddSchool={rejectAddSchool}
-                isAdminView={isAdminLogged}
+                deleteSchool={deleteSchool}
+                rejectDeleteSchool={rejectDeleteSchool}
+                adminView={adminView}
             />
               })
             }

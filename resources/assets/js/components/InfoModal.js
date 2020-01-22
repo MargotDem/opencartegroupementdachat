@@ -54,10 +54,11 @@ export default class App extends Component {
             zoneDeCouverture,
             ville_couverte,
             isAdminLogged,
-            isAdminView,
+            adminView,
             approveAddSchool,
             rejectAddSchool,
-            deleteSchool
+            deleteSchool,
+            rejectDeleteSchool
         } = this.props
         let d = new Date(school.up_to_date)
         let month = (d.getUTCMonth() + 1) < 10 ? "0" + (d.getUTCMonth() + 1) : (d.getUTCMonth() + 1)
@@ -80,7 +81,7 @@ export default class App extends Component {
                             <div className='school-modal-close' onClick={this.closeModal}>&times;</div>
                         </div>
                         {
-                            !isAdminView && <div className='school-modal-top-content'>
+                            !adminView && <div className='school-modal-top-content'>
                                 <p>
                                     Ces informations étaient à jour le :&nbsp;
                 <span className={date === '31-12-2019' ? 'update-date-grey' : ''}>
@@ -104,10 +105,10 @@ export default class App extends Component {
                                 <h4>Zone de couverture</h4>
                                 <p>
                                     {ville_couverte
-                                    ? <span>{ville_couverte}</span>
-                                    : <ul>{zoneDeCouverture.map((departement, i) => <li>{departement}</li>)}
-                                    </ul>}
-                                    </p>
+                                        ? <span>{ville_couverte}</span>
+                                        : <ul>{zoneDeCouverture.map((departement, i) => <li>{departement}</li>)}
+                                        </ul>}
+                                </p>
 
 
                                 <h4>Nombre d’adhérents</h4>
@@ -160,46 +161,69 @@ export default class App extends Component {
 
                         <br />
                         <div className="school-modal-bottom-buttons">
-                            <div className='school-modal-button'>
-                                <NavLink
-                                    className='my-button my-small-button'
-                                    to={'/etablissements/' + school.code_uai + '/modifier-informations'}
-                                >
-                                    Modifier
-                            </NavLink>
-                            </div>
+                            {
+                                !(adminView === "deletePending") && <div className='school-modal-button'>
+                                    <NavLink
+                                        className='my-button my-small-button'
+                                        to={'/etablissements/' + school.code_uai + '/modifier-informations'}
+                                    >
+                                        Modifier
+                                    </NavLink>
+                                </div>
+                            }
 
                             {
-                                isAdminView && <div
-                                    className='school-modal-button my-button my-small-button'
-                                    onClick={() => approveAddSchool(school.code_uai)}
-                                >
+                                (adminView === "addPending") && <>
+                                    <div
+                                        className='school-modal-button my-button my-small-button'
+                                        onClick={() => approveAddSchool(school.code_uai)}
+                                    >
 
-                                    Ajouter
+                                        Ajouter
                         </div>
+                                    <div
+                                        className='school-modal-button my-button my-small-button'
+                                        onClick={() => rejectAddSchool(school.code_uai)}
+                                    >
+
+                                        Rejeter demande d’ajout
+                            </div>
+                                </>
                             }
 
                             {
-                                (isAdminLogged && !isAdminView) && <div
-                                className='school-modal-button my-button my-small-button'
-                                onClick={() => deleteSchool(school.code_uai)}
-                            >
+                                (!adminView) && <div
+                                    className='school-modal-button my-button my-small-button'
+                                    onClick={() => deleteSchool(school.code_uai)}
+                                >
 
-                                Supprimer
+                                    Supprimer
                             </div>
                             }
 
-{
-                                isAdminView && <div
-                                className='school-modal-button my-button my-small-button'
-                                onClick={() => rejectAddSchool(school.code_uai)}
-                            >
+                            {
+                                (adminView === "deletePending") && <>
+                                    <div
+                                        className='school-modal-button my-button my-small-button'
+                                        onClick={() => rejectDeleteSchool(school.code_uai)}
+                                    >
+                                        Rejeter la demande de suppression
+                                </div>
+                                    <div
+                                        className='school-modal-button my-button my-small-button'
+                                        onClick={() => deleteSchool(school.code_uai)}
+                                    >
 
-                                Rejeter demande d’ajout
+                                        Supprimer
                             </div>
+                                </>
                             }
-                            
-                            
+
+                            {(school.status === "deletePending" && !adminView) && <span>Suppression demandée</span>}
+
+
+
+
                         </div>
                     </div>
                 </Modal>

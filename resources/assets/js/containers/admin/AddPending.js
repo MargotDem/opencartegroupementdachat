@@ -29,25 +29,31 @@ export default class AddPending extends Component {
     }
 
     approveAddSchool(code_uai) {
+        if (!window.confirm("Êtes-vous sûr·e ?")) {
+            return null
+        }
         axios.post(`/api/admin/approveAdd/${code_uai}`)
-        .then(response => {
-            console.log("reponse :", response)
-            this.fetchSchools()
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .then(response => {
+                console.log("reponse :", response)
+                this.fetchSchools()
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     rejectAddSchool(code_uai) {
+        if (!window.confirm("Êtes-vous sûr·e ?")) {
+            return null
+        }
         axios.post(`/api/admin/deleteSchool/${code_uai}`)
-        .then(response => {
-            console.log("reponse :", response)
-            this.fetchSchools()
-        })
-        .catch(error => {
-            console.log(error)
-        })
+            .then(response => {
+                console.log("reponse :", response)
+                this.fetchSchools()
+            })
+            .catch(error => {
+                console.log(error)
+            })
     }
 
     render() {
@@ -56,6 +62,7 @@ export default class AddPending extends Component {
             isAdminLogged={this.props.isAdminLogged}
             approveAddSchool={this.approveAddSchool}
             rejectAddSchool={this.rejectAddSchool}
+            adminView={"addPending"}
         />
     }
 }

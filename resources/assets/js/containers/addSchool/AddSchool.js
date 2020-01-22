@@ -24,7 +24,6 @@ export default class AddSchool extends Component {
 
   handleSubmission (school) {
     let { isAdminLogged } = this.props
-    console.log("handle submission, school data: ", school)
     axios.post('/api/etablissements',
       {
         ...school,

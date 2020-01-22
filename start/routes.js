@@ -34,6 +34,8 @@ Route.group(() => {
   Route.get('deletePending', 'AdminController.deletePending')
   Route.post('approveAdd/:code_uai', 'AdminController.approveAdd')
   Route.post('deleteSchool/:code_uai', 'AdminController.deleteSchool')
+  Route.post('askDeleteSchool/:code_uai', 'AdminController.askDeleteSchool')
+  Route.post('rejectDelete/:code_uai', 'AdminController.rejectDelete')
 })
 .prefix('api/admin/')
 

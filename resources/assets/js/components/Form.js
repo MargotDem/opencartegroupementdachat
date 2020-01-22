@@ -233,7 +233,6 @@ export default class Form extends Component {
   }
   handleSubmission(userInput) {
     let { handleSubmission } = this.props
-    console.log("handlesubmission user input", userInput)
     if (this.validator.allValid()) {
       handleSubmission(userInput)
     } else {

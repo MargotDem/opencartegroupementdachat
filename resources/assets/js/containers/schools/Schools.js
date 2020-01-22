@@ -20,11 +20,22 @@ export default class Schools extends Component {
   }
 
   deleteSchool(code_uai) {
-    const { isAdminLogged } = this.props
+    let { isAdminLogged } = this.props
+    let message = isAdminLogged ? "Êtes-vous sûr·e de vouloir supprimer cet établissement ?" : "Êtes-vous sûr·e de vouloir demander la suppression de cet établissement ?"
+    if (!window.confirm(message)) {
+      return null
+    }
     if (isAdminLogged) {
       axios.post(`/api/admin/deleteSchool/${code_uai}`)
         .then(response => {
-          console.log("reponse :", response)
+          this.fetchSchools()
+        })
+        .catch(error => {
+          console.log(error)
+        })
+    } else {
+      axios.post(`/api/admin/askDeleteSchool/${code_uai}`)
+        .then(response => {
           this.fetchSchools()
         })
         .catch(error => {
@@ -41,7 +52,6 @@ export default class Schools extends Component {
       let url = this.props.location
       axios.get(`/api/etablissements${url.search}`)
         .then(response => {
-          console.log("response", response)
           this.setState({ schools: response.data[0] })
         })
         .catch(function (error) {

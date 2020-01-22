@@ -20,10 +20,11 @@ export default class ResultsTable extends Component {
             school,
             fetchSchools,
             isAdminLogged,
-            isAdminView,
+            adminView,
             approveAddSchool,
             rejectAddSchool,
-            deleteSchool
+            deleteSchool,
+            rejectDeleteSchool
         } = this.props
 
         return (
@@ -46,7 +47,8 @@ export default class ResultsTable extends Component {
                                 approveAddSchool={approveAddSchool}
                                 rejectAddSchool={rejectAddSchool}
                                 deleteSchool={deleteSchool}
-                                isAdminView={isAdminView}
+                                rejectDeleteSchool={rejectDeleteSchool}
+                                adminView={adminView}
                             />
                         </span>
                     </td>
