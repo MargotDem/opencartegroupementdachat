@@ -15,7 +15,9 @@ class Body extends Component {
     super(props)
     this.state = {
       isAdminLogged: false,
-      noDatabaseConnection: false
+      noDatabaseConnection: false,
+      motsCles: null,
+      adminEmails: null
     }
     this.logUnlogAdmin = this.logUnlogAdmin.bind(this)
   }
@@ -35,12 +37,20 @@ class Body extends Component {
       .then(response => {
         if (!response.data.motsClesFournitures["errno"]) {
           this.setState({ motsCles: response.data })
+          axios.get("/api/adminEmails")
+            .then(response => {
+              this.setState({ adminEmails: response.data.map(admin => admin.email) })
+            })
+            .catch(error => {
+              console.log(error)
+            })
         } else {
           this.setState({ noDatabaseConnection: true })
         }
       }).catch(error => {
         console.log(error)
       })
+
   }
 
   buildRoute(path, isExact, Component, title) {
@@ -56,7 +66,7 @@ class Body extends Component {
   renderRoute(routeObject, index) {
     const dynamicTitle = routeObject.title ? (routeObject.title + ' - Open Carte Comptable') : 'Open Carte Comptable'
     const Component = routeObject.Component
-    const { isAdminLogged } = this.state
+    const { isAdminLogged, motsCles, adminEmails } = this.state
     return (
       <Route
         key={index}
@@ -68,7 +78,8 @@ class Body extends Component {
             dynamicTitle={dynamicTitle}
             isAdminLogged={isAdminLogged}
             logUnlogAdmin={this.logUnlogAdmin}
-            motsCles={this.state.motsCles}
+            motsCles={motsCles}
+            adminEmails={adminEmails}
           />
         }
       />

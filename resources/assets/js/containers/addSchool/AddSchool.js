@@ -5,6 +5,7 @@ import PageComponent from '../../components/PageComponent'
 import TopSection from '../../components/TopSection'
 import FormSection from '../../components/FormSection'
 import AddSchoolForm from './AddSchoolForm'
+import { sendEmail } from "../../../../../lib/lib"
 
 export default class AddSchool extends Component {
   constructor (props) {
@@ -23,7 +24,7 @@ export default class AddSchool extends Component {
   }
 
   handleSubmission (school) {
-    let { isAdminLogged } = this.props
+    let { isAdminLogged, adminEmails } = this.props
     axios.post('/api/etablissements',
       {
         ...school,
@@ -35,6 +36,7 @@ export default class AddSchool extends Component {
             isFormSent: true
           })
           console.log(response)
+          sendEmail(adminEmails, "demande d’ajout")
         } else {
           console.log("no 200 response: ", response)
           this.setState({

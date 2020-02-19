@@ -3,6 +3,16 @@
 const Database = use('Database')
 
 class AdminController {
+    async adminEmails() {
+        try {
+            return await Database
+                .select('email')
+                .from('ocga_admins')
+        } catch (error) {
+            return "Error: " + error
+        }
+    }
+
     async login({ request }) {
         let { email, password } = request.all()
         try {
@@ -55,7 +65,7 @@ class AdminController {
             return "Error: " + error
         }
     }
-    
+
 
     async askDeleteSchool({ params }) {
         try {

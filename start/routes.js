@@ -19,6 +19,7 @@ const Route = use('Route')
 
 Route.group(() => {
     Route.get('mots-cles', 'MotsCleController.index')
+    Route.get('adminEmails', 'AdminController.adminEmails')
     Route.post('etablissements', 'EtablissementMutualisateurController.store')
     Route.get('etablissements', 'EtablissementMutualisateurController.index')
     Route.put('etablissements/:code_uai', 'EtablissementMutualisateurController.update')

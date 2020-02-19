@@ -1,9 +1,10 @@
-import React, { Component } from 'react'
-import axios from 'axios'
+import React, { Component } from "react"
+import axios from "axios"
 
-import PageComponent from '../../components/PageComponent'
-import TopSection from '../../components/TopSection'
-import ResultsTable from '../../components/ResultsTable'
+import PageComponent from "../../components/PageComponent"
+import TopSection from "../../components/TopSection"
+import ResultsTable from "../../components/ResultsTable"
+import { sendEmail } from "../../../../../lib/lib"
 
 export default class Schools extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export default class Schools extends Component {
   }
 
   deleteSchool(code_uai) {
-    let { isAdminLogged } = this.props
+    let { isAdminLogged, adminEmails } = this.props
     let message = isAdminLogged ? "Êtes-vous sûr·e de vouloir supprimer cet établissement ?" : "Êtes-vous sûr·e de vouloir demander la suppression de cet établissement ?"
     if (!window.confirm(message)) {
       return null
@@ -36,6 +37,7 @@ export default class Schools extends Component {
     } else {
       axios.post(`/api/admin/askDeleteSchool/${code_uai}`)
         .then(response => {
+          sendEmail(adminEmails, "demande de suppression")
           this.fetchSchools()
         })
         .catch(error => {
