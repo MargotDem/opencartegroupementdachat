@@ -25,7 +25,7 @@ export default class Form extends Component {
         memo: 'Les informations complémentaires ne doivent pas dépasser 5 caractères',
         nom: 'Le nom ne doit pas dépasser 70 caractères',
         commune: 'La commune ne doit pas dépasser 50 caractères',
-        code_postal: 'Le code postal ne doit pas dépasser 6 caractères',
+        code_postal: 'Le code postal doit être valide',
         adresse: 'L’adresse ne doit pas dépasser 70 caractères',
         telephone: 'Le téléphone doit être un numéro valide',
         email: "L'adresse email doit être valide"
@@ -48,7 +48,7 @@ export default class Form extends Component {
         },
         code_postal: {
           rule: function (val) {
-            return val.toString().length < 7
+            return (val.toString().length < 7 && !isNaN(val))
           },
         },
         commune: {
